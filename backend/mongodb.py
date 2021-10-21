@@ -1,5 +1,8 @@
 import pymongo
 from bson import ObjectId
+import dns
+import os
+from dotenv import load_dotenv
 
 class Model(dict):
     """
@@ -37,11 +40,11 @@ class User(Model):
     # with <atlas-user>, <password> and <myFirstDatabase> updated accordingly
     # make sure .env is in .gitignore so that your password isn't relased into the wild
 
-    # load_dotenv()  # take environment variables from .env.
-    # MONGODB_URI = os.environ['MONGODB_URI']
-    # db_client = pymongo.MongoClient(MONGODB_URI)
+    load_dotenv()  # take environment variables from .env.
+    MONGODB_URI = os.environ['MONGODB_URI']
+    db_client = pymongo.MongoClient(MONGODB_URI)
 
-    db_client = pymongo.MongoClient('localhost', 27017)  #change if your db is in another host and port
+    # db_client = pymongo.MongoClient('localhost', 27017)  #change if your db is in another host and port
     collection = db_client["users"]["users_list"]  #db name is 'users' and collection name is 'users_list'
 
     def find_all(self):

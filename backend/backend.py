@@ -27,12 +27,13 @@ users = {
 def hello_world():
     return 'Hello, World!'
 
-# def gen_random_id():
-#   random_id = ''.join([random.choice(string.ascii_letters
-#            + string.digits) for n in range(6)])
-#   print (random_id)
-#   return random_id
-
+@app.route('/<id>/home')
+def get_home(id):
+    user = User({"_id": id})
+    if user.reload():
+        return jsonify(user.name), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
 
 @app.route('/users', methods=['GET', 'POST'])
 def get_users():
