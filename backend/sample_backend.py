@@ -23,8 +23,11 @@ users = {
 }
 
 
-@app.route('/')
+@app.route('/', methods=['POST'])
 def hello_world():
+    if request.method == 'POST':
+        username = request.args.get()
+        return 'wow'
     return 'Hello, World!'
 
 # def gen_random_id():
