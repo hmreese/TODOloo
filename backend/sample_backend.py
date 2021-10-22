@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+import hashlib
 import json
 # for linking frontend-backend
 from flask_cors import CORS
@@ -26,8 +27,22 @@ users = {
 @app.route('/', methods=['POST'])
 def hello_world():
     if request.method == 'POST':
-        username = request.args.get()
-        return 'wow'
+        # user = request.data
+        # print(ret)
+        hasher = hashlib.sha256()
+        print(request.data)
+        ret =request.data
+        username = ret["username"]
+        password = request.data("password")
+        print(username, password)
+        if username == None or password == None:
+            return jsonify({}), 400
+        if len(username) == 0 or len(password) == 0:
+            return jsonify({}), 404
+
+        hasher.update(password)
+        return jsonify({"password":hasher.hexdigest()}),200
+
     return 'Hello, World!'
 
 # def gen_random_id():
