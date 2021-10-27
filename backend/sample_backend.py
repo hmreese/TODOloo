@@ -16,7 +16,8 @@ from model_mongodb import User
 
 app = Flask(__name__)
 # CORS stands for Cross Origin Requests.
-# Here we'll allow requests coming from any domain. Not recommended for production environment.
+# Here we'll allow requests coming from any domain.
+# Not recommended for production environment.
 CORS(app)
 
 users = {
@@ -35,24 +36,23 @@ def login():
         except:
             return jsonify({}), 400
 
-        if password == None or username == None:
+        if password is None or username is None:
             return jsonify({}), 400
         hashedPas = hashlib.sha256(password.encode())
 
-        #TODO check database for username and pass
+        # TODO check database for username and pass
         # if pass != databasePass:
         # return jsonify({"username":username}),400
 
-
-        #return the object key for user
-        return jsonify({"username":username}),200
+        # return the object key for user
+        return jsonify({"username": username}), 200
 
 
 @app.route('/api/users', methods=['POST'])
 def create_user():
-    #name
-    #username
-    #passowrd
+    # name
+    # username
+    # password
     if request.method == 'POST':
         ret = request.get_json()
 
@@ -63,16 +63,16 @@ def create_user():
         except:
             return jsonify({}), 418
 
-        if password == None or username == None:
+        if password is None or username is None:
             return jsonify({}), 418
 
         hashedPas = hashlib.sha256(password.encode())
 
-        #TODO add user data to database
+        # TODO add user data to database
         # if unsuccessful
         # return jsonify({"username":username}),400
 
-        return jsonify({"username":username}),201
+        return jsonify({"username": username}), 201
 
 
 # @app.route('/users', methods=['GET', 'POST'])
@@ -91,7 +91,8 @@ def create_user():
 #         return {"users_list": users}
 #     elif request.method == 'POST':
 #         userToAdd = request.get_json()
-#         # userToAdd['id'] = gen_random_id() # check for duplicate before appending.. todo
+#         # userToAdd['id'] = gen_random_id()
+#         # check for duplicate before appending.. todo
 #         # users['users_list'].append(userToAdd)
 #         # updated for db_access
 #         # make DB request to add user
