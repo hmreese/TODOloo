@@ -6,16 +6,19 @@ import { Redirect } from 'react-router'
 import './login.scss'
 import { theme } from '../theme'
 import { ThemeProvider } from '@theme-ui/core'
+import Button from '../components/Button'
 
 const Login = () => {
 
   // UI animation handling states
   const [focusedUser, setFocusedUser] = useState(false)
+  const [focusedName, setFocusedName] = useState(false)
   const [focusedPass, setFocusedPass] = useState(false)
   const [focusedValidatePass, setFocusedValidatePass] = useState(false)
 
   // states keeping track of user entered data
   const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [passwordValidate, setPasswordValidate] = useState('')
 
@@ -32,10 +35,12 @@ const Login = () => {
   const [clicked, setClicked] = useState(false);
   const handleClick = () => {
     setFocusedUser(false);
+    setFocusedName(false);
     setFocusedValidatePass(false);
     setFocusedPass(false);
     setPassword('');
     setUsername('');
+    setName('');
     setPasswordValidate('');
     setClicked(clicked => !clicked);
   }
@@ -47,6 +52,7 @@ const Login = () => {
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     const body = {
+      // name,
       username,
       password,
     };
@@ -87,6 +93,7 @@ const Login = () => {
       }
     } catch (e) {
       console.log(e)
+      setErrorMsg('Incorrect username or password. Try again!');
     }
   }
 
@@ -147,7 +154,7 @@ const Login = () => {
                 Sign In
               </button>
               <p>New Here?</p>
-              <button type="button" onClick={handleClick} className="btn">
+              <button className="btn" type="button" onClick={handleClick} >
                  Sign Up
               </button>
             </form>
@@ -156,6 +163,27 @@ const Login = () => {
           <form onSubmit={handleRegisterSubmit}>
           {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             <h2 className="title">Welcome</h2>
+            <div className={focusedName ? "input-div one focus" : "input-div one"}
+                sx={{borderBottom: '1px solid', color: 'text'}}
+                >
+                <div className="i">
+                  <FAicons.FaUser className="fas fa-user" sx={{color: 'text'}}></FAicons.FaUser>
+                </div>
+                <div className="input-container"> 
+                    <h5>Name</h5>
+                    <label htmlFor="name">
+                      <input 
+                        type="text" 
+                        id="name"
+                        name="name"
+                        className="input" 
+                        value={name}
+                        onFocus={() => setFocusedName(true)}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </label>
+                </div>
+              </div>
             <div className={focusedUser ? "input-div one focus" : "input-div one"}
                 sx={{borderBottom: '1px solid', color: 'text'}}
                 >
