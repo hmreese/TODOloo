@@ -1,14 +1,11 @@
 import { Flex } from 'theme-ui'
 import React, { useState } from 'react'
 import * as FAicons from 'react-icons/fa'
-import { useUser } from "../utils/hooks"
-import { Redirect } from 'react-router'
 import './login.scss'
-import { theme } from '../theme'
+import { theme } from '../../theme'
 import { ThemeProvider } from '@theme-ui/core'
-import Button from '../components/Button'
 
-const Login = () => {
+const Login = ({user, setUser}) => {
 
   // UI animation handling states
   const [focusedUser, setFocusedUser] = useState(false)
@@ -45,14 +42,12 @@ const Login = () => {
     setClicked(clicked => !clicked);
   }
 
-  // authentication handling
-  const [user, { mutate }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     const body = {
-      // name,
+      name,
       username,
       password,
     };
@@ -64,7 +59,8 @@ const Login = () => {
       });
       if (res.status === 201) {
         const userObj = await res.json();
-        mutate('http://localhost:5000/api/users', userObj);
+        await localStorage.setItem('user', JSON.stringify(userObj))
+        setUser(userObj)
       } else {
         setErrorMsg(res.text());
       }
@@ -87,7 +83,8 @@ const Login = () => {
       });
       if (res.status === 200) {
         const userObj = await res.json();
-        mutate('http://localhost:5000/api/auth', userObj);
+        await localStorage.setItem('user', JSON.stringify(userObj))
+        setUser(userObj)
       } else {
         setErrorMsg('Incorrect username or password. Try again!');
       }
@@ -99,7 +96,7 @@ const Login = () => {
 
   return (
     <div id="LoginPage">
-      {user && <Redirect to="/"/>}
+      {console.log(user)}
       <div className="container">
         <Flex className={clicked ? "login-content flip" : "login-content unflip"}>
           <form onSubmit={handleLoginSubmit}>
@@ -257,10 +254,10 @@ const Login = () => {
   )
 }
 
-const LoginForm = () => {
+const LoginForm = ({user, setUser}) => {
   return (
     <ThemeProvider theme={theme}>
-      <Login />
+      <Login user={user} setUser={setUser} />
     </ThemeProvider>
   )
 }

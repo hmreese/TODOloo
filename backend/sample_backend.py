@@ -24,7 +24,7 @@ users = {
 }
 
 
-@app.route('/', methods=['POST'])
+@app.route('/api/auth', methods=['POST'])
 def login():
     if request.method == 'POST':
         ret = request.get_json()
@@ -68,11 +68,16 @@ def create_user():
 
         hashedPas = hashlib.sha256(password.encode())
 
+        data = {
+            "username": username,
+            "name": name
+        }
+
         #TODO add user data to database
         # if unsuccessful
         # return jsonify({"username":username}),400
 
-        return jsonify({"username":username}),201
+        return jsonify(data),201
 
 
 # @app.route('/users', methods=['GET', 'POST'])
