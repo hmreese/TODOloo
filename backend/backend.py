@@ -83,6 +83,8 @@ def create_user():
     # name
     # username
     # password
+    # TODO: handle unique users
+    # if username is uniqe add to database ie hannah logic
     if request.method == 'POST':
         ret = request.get_json()
 
