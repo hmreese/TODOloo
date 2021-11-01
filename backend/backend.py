@@ -9,6 +9,10 @@ from mongodb import User
 app = Flask(__name__)
 CORS(app)
 
+users = {
+    'users_list': []
+}
+
 # HIGH = 3
 # MED = 2
 # LOW = 1
