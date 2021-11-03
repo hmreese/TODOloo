@@ -69,3 +69,9 @@ class User(Model):
         for user in users:
             user["_id"] = str(user["_id"])
         return user["lists"]
+
+    def find_by_username(self, username):
+        users = list(self.collection.find({"username": username}))
+        for user in users:
+            user["_id"] = str(user["_id"])
+        return users  

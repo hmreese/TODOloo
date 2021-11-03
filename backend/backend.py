@@ -47,15 +47,32 @@ CORS(app)
 # }
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+# @app.route('/')
+# def hello_world():
+#     return 'Hello, World!'
 
 
-@app.route('/<id>/home')
-def get_home(id):
-    user = User().find_by_id(id)
+# home returns whole user json
+@app.route('/<username>/home')
+def get_home(username):
+    user = User().find_by_username(username)  
     return jsonify(user), 200
+
+
+# lists returns user's lists
+@app.route('/<username>/lists')
+def get_lists(username):
+    user = User().find_by_username(username)
+    lists = user[0]["lists"] 
+    return jsonify(lists), 200
+
+
+# friends returns user's friends
+@app.route('/<username>/friends')
+def get_friends(username):
+    user = User().find_by_username(username)
+    lists = user[0]["friends"] 
+    return jsonify(lists), 200
 
 
 @app.route('/', methods=['POST'])
@@ -80,7 +97,13 @@ def login():
         # return the object key for user
         return jsonify({"username": username}), 200
 
+#       userToAdd = request.get_json()
+#       newUser = User(userToAdd)
+#       newUser.save()
+#       resp = jsonify(newUser), 201
+#       return resp
 
+# TODO: create user in database
 @app.route('/api/users', methods=['POST'])
 def create_user():
     # name
@@ -102,7 +125,12 @@ def create_user():
         hashedPas = hashlib.sha256(password.encode())
 
         # TODO add user data to database
+        newUser = User(ret)
+        newUser.save()
+        resp = jsonify({"username": username}), 201
+        return resp
+        
         # if unsuccessful
         # return jsonify({"username":username}),400
 
-        return jsonify({"username": username}), 201
+        # return jsonify({"username": username}), 201
