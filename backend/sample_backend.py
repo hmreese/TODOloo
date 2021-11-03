@@ -1,82 +1,82 @@
-#############################################
-# depricated do not use
-#############################################
+# #############################################
+# # depricated do not use
+# #############################################
 
-from flask import Flask
-from flask import request
-from flask import jsonify
-import hashlib
-import json
-# for linking frontend-backend
-from flask_cors import CORS
+# from flask import Flask
+# from flask import request
+# from flask import jsonify
+# import hashlib
+# import json
+# # for linking frontend-backend
+# from flask_cors import CORS
 
-# for random ids
-# import random
-# import string
+# # for random ids
+# # import random
+# # import string
 
-# for mongo db
-from model_mongodb import User
-
-
-app = Flask(__name__)
-# CORS stands for Cross Origin Requests.
-# Here we'll allow requests coming from any domain.
-# Not recommended for production environment.
-CORS(app)
-
-users = {
-    'users_list': []
-}
+# # for mongo db
+# from model_mongodb import User
 
 
-@app.route('/', methods=['POST'])
-def login():
-    if request.method == 'POST':
-        ret = request.get_json()
+# app = Flask(__name__)
+# # CORS stands for Cross Origin Requests.
+# # Here we'll allow requests coming from any domain.
+# # Not recommended for production environment.
+# CORS(app)
 
-        try:
-            username = ret["username"]
-            password = ret["password"]
-        except:
-            return jsonify({}), 400
-
-        if password is None or username is None:
-            return jsonify({}), 400
-        hashedPas = hashlib.sha256(password.encode())
-
-        # TODO check database for username and pass
-        # if pass != databasePass:
-        # return jsonify({"username":username}),400
-
-        # return the object key for user
-        return jsonify({"username": username}), 200
+# users = {
+#     'users_list': []
+# }
 
 
-@app.route('/api/users', methods=['POST'])
-def create_user():
-    # name
-    # username
-    # password
-    if request.method == 'POST':
-        ret = request.get_json()
+# @app.route('/', methods=['POST'])
+# def login():
+#     if request.method == 'POST':
+#         ret = request.get_json()
 
-        try:
-            username = ret["username"]
-            password = ret["password"]
-            name = ret["name"]
-        except:
-            return jsonify({}), 418
+#         try:
+#             username = ret["username"]
+#             password = ret["password"]
+#         except:
+#             return jsonify({}), 400
 
-        if password is None or username is None:
-            return jsonify({}), 418
+#         if password is None or username is None:
+#             return jsonify({}), 400
+#         hashedPas = hashlib.sha256(password.encode())
 
-        hashedPas = hashlib.sha256(password.encode())
+#         # TODO check database for username and pass
+#         # if pass != databasePass:
+#         # return jsonify({"username":username}),400
 
-        # TODO add user data to database
-        # if unsuccessful
-        # return jsonify({"username":username}),400
+#         # return the object key for user
+#         return jsonify({"username": username}), 200
 
-        return jsonify({"username": username}), 201
+
+# @app.route('/api/users', methods=['POST'])
+# def create_user():
+#     # name
+#     # username
+#     # password
+#     if request.method == 'POST':
+#         ret = request.get_json()
+
+#         try:
+#             username = ret["username"]
+#             password = ret["password"]
+#             name = ret["name"]
+#         except:
+#             return jsonify({}), 418
+
+#         if password is None or username is None:
+#             return jsonify({}), 418
+
+#         hashedPas = hashlib.sha256(password.encode())
+
+#         # TODO add user data to database
+#         # if unsuccessful
+#         # return jsonify({"username":username}),400
+
+#         return jsonify({"username": username}), 201
 
 
 # @app.route('/users', methods=['GET', 'POST'])

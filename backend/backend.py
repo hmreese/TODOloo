@@ -69,7 +69,7 @@ def login():
         if password is None or username is None:
             return jsonify({}), 400
         hashedPas = hashlib.sha256(password.encode())
-
+        
         # TODO check database for username and pass
         # if pass != databasePass:
         # return jsonify({"username":username}),400
