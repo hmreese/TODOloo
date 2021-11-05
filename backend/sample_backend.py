@@ -95,12 +95,8 @@
 #         return {"users_list": users}
 #     elif request.method == 'POST':
 #         userToAdd = request.get_json()
-<<<<<<< HEAD
-#         # userToAdd['id'] = gen_random_id() # check for duplicate before appending.. todo
-=======
 #         # userToAdd['id'] = gen_random_id()
 #         # check for duplicate before appending.. todo
->>>>>>> origin/authBackend
 #         # users['users_list'].append(userToAdd)
 #         # updated for db_access
 #         # make DB request to add user

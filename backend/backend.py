@@ -72,8 +72,11 @@ def get_friends(username):
     return jsonify(lists), 200
 
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
+    if request.method == 'GET':
+        return 'Hello, World!'
+
     if request.method == 'POST':
         ret = request.get_json()
         try:
@@ -93,18 +96,9 @@ def login():
 
         return jsonify({"username": username}), 200
 
-    #       userToAdd = request.get_json()
-    #       newUser = User(userToAdd)
-    #       newUser.save()
-    #       resp = jsonify(newUser), 201
-    #       return resp
 
-# TODO: create user in database
 @app.route('/api/users', methods=['POST'])
 def create_user():
-    # name
-    # username
-    # password
     if request.method == 'POST':
         ret = request.get_json()
         try:
@@ -119,7 +113,7 @@ def create_user():
 
         hashedPas = hashlib.sha256(password.encode())
         print(hashedPas.hexdigest())
-        user = jsonify({'username': username, 'password': str(hashedPas.hexdigest()), 'name': name})
+        user = {'username': username, 'password': str(hashedPas.hexdigest()), 'name': name}
 
         # TODO add user data to database
         newUser = User(user)
