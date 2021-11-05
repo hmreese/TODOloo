@@ -1,83 +1,82 @@
-from flask import Flask
-from flask import request
-from flask import jsonify
-import hashlib
-import json
-# for linking frontend-backend
-from flask_cors import CORS
+# #############################################
+# # depricated do not use
+# #############################################
 
-# for random ids
-# import random
-# import string
+# from flask import Flask
+# from flask import request
+# from flask import jsonify
+# import hashlib
+# import json
+# # for linking frontend-backend
+# from flask_cors import CORS
 
-# for mongo db
-from model_mongodb import User
+# # for random ids
+# # import random
+# # import string
 
-
-app = Flask(__name__)
-# CORS stands for Cross Origin Requests.
-# Here we'll allow requests coming from any domain. Not recommended for production environment.
-CORS(app)
-
-users = {
-    'users_list': []
-}
+# # for mongo db
+# from model_mongodb import User
 
 
-@app.route('/api/auth', methods=['POST'])
-def login():
-    if request.method == 'POST':
-        ret = request.get_json()
+# app = Flask(__name__)
+# # CORS stands for Cross Origin Requests.
+# # Here we'll allow requests coming from any domain.
+# # Not recommended for production environment.
+# CORS(app)
 
-        try:
-            username = ret["username"]
-            password = ret["password"]
-        except:
-            return jsonify({}), 400
-
-        if password == None or username == None:
-            return jsonify({}), 400
-        hashedPas = hashlib.sha256(password.encode())
-
-        #TODO check database for username and pass
-        # if pass != databasePass:
-        # return jsonify({"username":username}),400
+# users = {
+#     'users_list': []
+# }
 
 
-        #return the object key for user
-        return jsonify({"username":username}),200
+# @app.route('/', methods=['POST'])
+# def login():
+#     if request.method == 'POST':
+#         ret = request.get_json()
+
+#         try:
+#             username = ret["username"]
+#             password = ret["password"]
+#         except:
+#             return jsonify({}), 400
+
+#         if password is None or username is None:
+#             return jsonify({}), 400
+#         hashedPas = hashlib.sha256(password.encode())
+
+#         # TODO check database for username and pass
+#         # if pass != databasePass:
+#         # return jsonify({"username":username}),400
+
+#         # return the object key for user
+#         return jsonify({"username": username}), 200
 
 
-@app.route('/api/users', methods=['POST'])
-def create_user():
-    #name
-    #username
-    #passowrd
-    if request.method == 'POST':
-        ret = request.get_json()
+# @app.route('/api/users', methods=['POST'])
+# def create_user():
+#     # name
+#     # username
+#     # password
+#     if request.method == 'POST':
+#         ret = request.get_json()
 
-        try:
-            username = ret["username"]
-            password = ret["password"]
-            name = ret["name"]
-        except:
-            return jsonify({}), 418
+#         try:
+#             username = ret["username"]
+#             password = ret["password"]
+#             name = ret["name"]
+#         except:
+#             return jsonify({}), 418
 
-        if password == None or username == None:
-            return jsonify({}), 418
+#         if password is None or username is None:
+#             return jsonify({}), 418
 
-        hashedPas = hashlib.sha256(password.encode())
+#         hashedPas = hashlib.sha256(password.encode())
 
-        data = {
-            "username": username,
-            "name": name
-        }
+#         # TODO add user data to database
+#         # if unsuccessful
+#         # return jsonify({"username":username}),400
 
-        #TODO add user data to database
-        # if unsuccessful
-        # return jsonify({"username":username}),400
-
-        return jsonify(data),201
+#         return jsonify({"username": username}), 201
 
 
 # @app.route('/users', methods=['GET', 'POST'])
@@ -96,7 +95,12 @@ def create_user():
 #         return {"users_list": users}
 #     elif request.method == 'POST':
 #         userToAdd = request.get_json()
+<<<<<<< HEAD
 #         # userToAdd['id'] = gen_random_id() # check for duplicate before appending.. todo
+=======
+#         # userToAdd['id'] = gen_random_id()
+#         # check for duplicate before appending.. todo
+>>>>>>> origin/authBackend
 #         # users['users_list'].append(userToAdd)
 #         # updated for db_access
 #         # make DB request to add user

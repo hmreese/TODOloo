@@ -9,6 +9,10 @@ from mongodb import User
 app = Flask(__name__)
 CORS(app)
 
+users = {
+    'users_list': []
+}
+
 # HIGH = 3
 # MED = 2
 # LOW = 1
@@ -50,11 +54,12 @@ CORS(app)
 # def hello_world():
 #     return 'Hello, World!'
 
+        # return jsonify({"username": username}), 201
 
 # home returns whole user json
 @app.route('/<username>/home')
 def get_home(username):
-    user = User().find_by_username(username)  
+    user = User().find_by_username(username)
     return jsonify(user), 200
 
 
@@ -62,7 +67,7 @@ def get_home(username):
 @app.route('/<username>/lists')
 def get_lists(username):
     user = User().find_by_username(username)
-    lists = user[0]["lists"] 
+    lists = user[0]["lists"]
     return jsonify(lists), 200
 
 
@@ -70,7 +75,7 @@ def get_lists(username):
 @app.route('/<username>/friends')
 def get_friends(username):
     user = User().find_by_username(username)
-    lists = user[0]["friends"] 
+    lists = user[0]["friends"]
     return jsonify(lists), 200
 
 
@@ -128,9 +133,9 @@ def create_user():
         newUser = User(user)
         newUser.save()
         resp = jsonify({"username": username}), 201
-        
+
         return resp
-        
+
         # if unsuccessful
         # return jsonify({"username":username}),400
 
