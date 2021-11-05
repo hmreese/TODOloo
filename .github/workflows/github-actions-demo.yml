@@ -15,5 +15,5 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
-      - run: pip install -r requirements.txt
+      - run: pip install -r /backend/requirements.txt
       - run: pytest /backend/test_backend.py
