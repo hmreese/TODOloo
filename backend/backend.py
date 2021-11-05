@@ -6,7 +6,6 @@ import json
 from flask_cors import CORS
 from mongodb import User
 
-
 app = Flask(__name__)
 CORS(app)
 
@@ -97,11 +96,11 @@ def login():
         # return the object key for user
         return jsonify({"username": username}), 200
 
-#       userToAdd = request.get_json()
-#       newUser = User(userToAdd)
-#       newUser.save()
-#       resp = jsonify(newUser), 201
-#       return resp
+    #       userToAdd = request.get_json()
+    #       newUser = User(userToAdd)
+    #       newUser.save()
+    #       resp = jsonify(newUser), 201
+    #       return resp
 
 # TODO: create user in database
 @app.route('/api/users', methods=['POST'])
@@ -111,7 +110,6 @@ def create_user():
     # password
     if request.method == 'POST':
         ret = request.get_json()
-
         try:
             username = ret["username"]
             password = ret["password"]
@@ -123,11 +121,14 @@ def create_user():
             return jsonify({}), 418
 
         hashedPas = hashlib.sha256(password.encode())
+        print(hashedPas.hexdigest())
+        user = jsonify({'username': username, 'password': str(hashedPas.hexdigest()), 'name': name})
 
         # TODO add user data to database
-        newUser = User(ret)
+        newUser = User(user)
         newUser.save()
         resp = jsonify({"username": username}), 201
+        
         return resp
         
         # if unsuccessful
