@@ -49,13 +49,6 @@ users = {
 #     ]
 # }
 
-
-# @app.route('/')
-# def hello_world():
-#     return 'Hello, World!'
-
-        # return jsonify({"username": username}), 201
-
 # home returns whole user json
 @app.route('/<username>/home')
 def get_home(username):
@@ -63,9 +56,8 @@ def get_home(username):
     return jsonify(user), 200
 
 
-# get lists returns user's lists
-# post lists returns created list
-@app.route('/<username>/lists', methods=['GET', 'POST'])
+# lists returns user's lists
+@app.route('/<username>/lists', methods=['GET', 'POST', 'DELETE'])
 def get_lists(username):
     if request.method == 'GET':
         user = User().find_by_username(username)
@@ -77,6 +69,11 @@ def get_lists(username):
         l = {'name': listname, 'tasks': []}
         ret = User().add_list(username, listname)
         return jsonify(ret)
+
+    if request.method == 'DELETE':
+        return jsonify({}), 418
+
+
 
 # friends returns user's friends
 @app.route('/<username>/friends')
@@ -93,7 +90,6 @@ def login():
 
     if request.method == 'POST':
         ret = request.get_json()
-
         try:
             username = ret["username"]
             password = ret["password"]
@@ -104,11 +100,11 @@ def login():
             return jsonify({}), 400
         hashedPas = hashlib.sha256(password.encode())
 
-        # TODO check database for username and pass
-        # if pass != databasePass:
-        # return jsonify({"username":username}),400
+        resp = User().find_by_username(username)
 
-        # return the object key for user
+        if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
+            return jsonify({"username":username}),400
+
         return jsonify({"username": username}), 200
 
 
