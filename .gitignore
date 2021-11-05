@@ -1,2 +1,5 @@
 /node_modules
-backend/.env
+.env
+*.pyc
+/backend/venv
+/backend/.env
