@@ -63,13 +63,20 @@ def get_home(username):
     return jsonify(user), 200
 
 
-# lists returns user's lists
-@app.route('/<username>/lists')
+# get lists returns user's lists
+# post lists returns created list
+@app.route('/<username>/lists', methods=['GET', 'POST'])
 def get_lists(username):
-    user = User().find_by_username(username)
-    lists = user[0]["lists"]
-    return jsonify(lists), 200
-
+    if request.method == 'GET':
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 200
+    
+    elif request.method == 'POST':
+        listname = request.get_json()['name']
+        l = {'name': listname, 'tasks': []}
+        ret = User().add_list(username, listname)
+        return jsonify(ret)
 
 # friends returns user's friends
 @app.route('/<username>/friends')
@@ -121,7 +128,7 @@ def create_user():
 
         hashedPas = hashlib.sha256(password.encode())
         print(hashedPas.hexdigest())
-        user = {'username': username, 'password': str(hashedPas.hexdigest()), 'name': name}
+        user = {'username': username, 'password': str(hashedPas.hexdigest()), 'name': name, 'lists': [], 'friends': []}
 
         # TODO add user data to database
         newUser = User(user)

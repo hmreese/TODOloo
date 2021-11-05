@@ -75,3 +75,20 @@ class User(Model):
         for user in users:
             user["_id"] = str(user["_id"])
         return users  
+
+    def add_list(self, username, listname):
+        query = {"username": username}
+        update = { 
+            "$push": {
+                "lists": {
+                    "name": listname,
+                    "public": False,
+                    "tasks": []
+                }
+            }
+        }
+        options = {"upsert": False}
+
+        ret = list(self.collection.update(query, update, options))
+        
+        return ret
