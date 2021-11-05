@@ -50,7 +50,6 @@ python-dateutil==1.5
 python-dotenv==0.18.0
 pytz==2013.7
 requests==2.26.0
-scandir==1.10.0
 scipy==0.13.0b1
 singledispatch==3.7.0
 six==1.12.0
