@@ -49,13 +49,6 @@ users = {
 #     ]
 # }
 
-
-# @app.route('/')
-# def hello_world():
-#     return 'Hello, World!'
-
-        # return jsonify({"username": username}), 201
-
 # home returns whole user json
 @app.route('/<username>/home')
 def get_home(username):
@@ -83,7 +76,6 @@ def get_friends(username):
 def login():
     if request.method == 'POST':
         ret = request.get_json()
-
         try:
             username = ret["username"]
             password = ret["password"]
@@ -94,11 +86,11 @@ def login():
             return jsonify({}), 400
         hashedPas = hashlib.sha256(password.encode())
 
-        # TODO check database for username and pass
-        # if pass != databasePass:
-        # return jsonify({"username":username}),400
+        resp = User().find_by_username(username)
 
-        # return the object key for user
+        if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
+            return jsonify({"username":username}),400
+
         return jsonify({"username": username}), 200
 
     #       userToAdd = request.get_json()
