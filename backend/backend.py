@@ -57,11 +57,21 @@ def get_home(username):
 
 
 # lists returns user's lists
-@app.route('/<username>/lists')
+@app.route('/<username>/lists', methods=['GET', 'POST', 'DELETE'])
 def get_lists(username):
-    user = User().find_by_username(username)
-    lists = user[0]["lists"]
-    return jsonify(lists), 200
+    if request.method == 'GET':
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 200
+
+
+    if request.method == 'POST':
+        return jsonify({}), 418
+
+
+    if request.method == 'DELETE':
+        return jsonify({}), 418
+
 
 
 # friends returns user's friends
