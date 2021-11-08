@@ -23,7 +23,7 @@ def test_get_lists():
         pytest.fail("Request failed")
 
 def test_get_friends():
-    resp = requests.get('https://todoloo307.herokuapp.com/{0}friends'.format('hreese'))
+    resp = requests.get('https://todoloo307.herokuapp.com/{0}/friends'.format('hreese'))
     if (resp):
         r = resp.json()
         assert (r[0] == 'bob24')
