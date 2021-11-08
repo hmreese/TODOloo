@@ -13,6 +13,7 @@ jobs:
             python-version: 2.7
       - run: pip install --upgrade setuptools
       - run: pip install future
+      - run: pip install pyobjc-framework-SystemConfiguration
       - run: pip install -r requirements.txt
         working-directory: ./backend
       - run: pytest test_backend.py
