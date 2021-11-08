@@ -57,6 +57,37 @@ def get_home(username):
 
 
 # lists returns user's lists
+@app.route('/<username>/<listID>', methods=['POST', 'DELETE'])
+def get_lists(username, listID):
+    if request.method == 'POST':
+        try:
+            taskIndex = request.get_json()['taskIndex']
+        except:
+            return jsonify({}), 400
+        if taskIndex is None:
+            return jsonify({}), 400
+
+
+        # if task index exsits in list
+        # ie return a task and if not null:
+        #   add new task
+        # else:
+        #   update cur task
+        return jsonify({}), 200
+
+    if request.method == 'DELETE':
+        try:
+            taskIndex = request.get_json()['taskIndex']
+        except:
+            return jsonify({}), 400
+        if taskIndex is None:
+            return jsonify({}), 400
+
+        #hanna func
+        # ret = User().remove_task(username, listID)
+        return jsonify({}), 200
+
+# lists returns user's lists
 @app.route('/<username>/lists', methods=['GET', 'POST', 'DELETE'])
 def get_lists(username):
     if request.method == 'GET':
@@ -80,8 +111,8 @@ def get_lists(username):
             return jsonify({}), 400
         if username is None or listname is None:
             return jsonify({}), 400
-
-        ret = User().remove_list(username, listname)
+        #hanna func
+        # ret = User().remove_list(username, listname)
         return jsonify(ret), 200
 
 
