@@ -15,10 +15,5 @@ jobs:
       - run: pip install future
       - run: pip install -r requirements.txt
         working-directory: ./backend
-      - run: |
-          export FLASK_APP=backend.py
-          export FLASK_ENV=development
-          flask run
-        working-directory: ./backend
       - run: pytest test_backend.py
         working-directory: ./backend
