@@ -8,5 +8,5 @@ jobs:
         uses: actions/setup-python@v1
         with:
             python-version: 2.7
-      - run: pip install -r ./TODOloo/backend/requirements.txt
-      - run: pytest ./TODOloo/backend/test_backend.py
+      - run: pip install -r ./backend/requirements.txt
+      - run: pytest ./backend/test_backend.py
