@@ -61,10 +61,16 @@ def get_home(username):
 def get_task(username, listID):
     if request.method == 'POST':
         try:
-            taskIndex = request.get_json()['taskIndex']
+            task_num = request.get_json()['task_num']
+            title = request.get_json()['title']
+            date = request.get_json()['date']
+            description = request.get_json()['description']
+            priority = request.get_json()['priority']
+            completed = request.get_json()['completed']
+
         except:
             return jsonify({}), 400
-        if taskIndex is None:
+        if task_num is None or title is None or date is None or description is None or priority is None or completed is None:
             return jsonify({}), 400
 
         #ret = User().post_task(username, lsitID, taskIndex)
@@ -72,10 +78,10 @@ def get_task(username, listID):
 
     if request.method == 'DELETE':
         try:
-            taskIndex = request.get_json()['taskIndex']
+            task_num = request.get_json()['task_num']
         except:
             return jsonify({}), 400
-        if taskIndex is None:
+        if task_num is None:
             return jsonify({}), 400
 
         #hanna func
