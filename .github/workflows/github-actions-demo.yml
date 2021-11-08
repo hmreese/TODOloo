@@ -12,7 +12,7 @@ jobs:
         with:
             python-version: 2.7
       - run: pip install --upgrade setuptools
-      - run: pip install --no-use-wheel --upgrade distribute
+      - run: pip install future
       - run: pip install -U pyobjc
       - run: pip install -r requirements.txt
         working-directory: ./backend
