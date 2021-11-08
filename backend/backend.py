@@ -58,7 +58,7 @@ def get_home(username):
 
 # lists returns user's lists
 @app.route('/<username>/<listID>', methods=['POST', 'DELETE'])
-def get_lists(username, listID):
+def get_task(username, listID):
     if request.method == 'POST':
         try:
             taskIndex = request.get_json()['taskIndex']
