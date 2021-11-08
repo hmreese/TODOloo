@@ -83,15 +83,15 @@ class User(Model):
                 "lists": {
                     "name": listname,
                     "public": False,
+                    "completed": False,
                     "tasks": []
                 }
             }
         }
-        options = {"upsert": False}
 
-        ret = list(self.collection.update(query, update, options))
+        list(self.collection.update(query, update, False))
 
-        return ret
+        return listname
 
 ### HANNAH LOGIC please fix me I am broken
     def remove_list(self, username, listname):
