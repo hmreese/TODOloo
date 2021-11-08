@@ -14,6 +14,8 @@ configparser==4.0.2
 contextlib2==0.6.0.post1
 cryptography==2.6.1
 distlib==0.3.3
+Django==1.11.29
+django-utils==0.0.2
 dnspython==1.16.0
 enum34==1.1.6
 filelock==3.1.0
@@ -22,6 +24,7 @@ Flask-Cors==3.0.10
 Flask-Session==0.4.0
 funcsigs==1.0.2
 future==0.17.1
+gunicorn==19.10.0
 idna==2.10
 importlib-metadata==2.1.1
 importlib-resources==3.3.1

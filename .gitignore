@@ -3,3 +3,4 @@
 *.pyc
 /backend/venv
 /backend/.env
+/python-getting-started
