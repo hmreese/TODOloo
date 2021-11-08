@@ -7,7 +7,7 @@ from flask import jsonify
 import json
 
 def test_get_user():
-    resp = requests.get('http://127.0.0.1:5000/{0}/home'.format('hreese'))
+    resp = requests.get('https://todoloo307.herokuapp.com/{0}/home'.format('hreese'))
     if (resp):
         r = resp.json()
         assert (r[0]['username'] == 'hreese')
@@ -15,7 +15,7 @@ def test_get_user():
         pytest.fail("Request failed")
 
 def test_get_lists():
-    resp = requests.get('http://127.0.0.1:5000/{0}/lists'.format('hreese'))
+    resp = requests.get('https://todoloo307.herokuapp.com/{0}/lists'.format('hreese'))
     if (resp):
         r = resp.json()
         assert (r[0]['name'] == 'School')
@@ -23,7 +23,7 @@ def test_get_lists():
         pytest.fail("Request failed")
 
 def test_get_friends():
-    resp = requests.get('http://127.0.0.1:5000/{0}/friends'.format('hreese'))
+    resp = requests.get('https://todoloo307.herokuapp.com/friends'.format('hreese'))
     if (resp):
         r = resp.json()
         assert (r[0] == 'bob24')
