@@ -57,7 +57,7 @@ def get_home(username):
 
 
 # lists returns user's lists
-@app.route('/<username>/<listID>', methods=['POST', 'DELETE'])
+@app.route('/<username>/<taskID>', methods=['POST', 'DELETE'])
 def get_task(username, listID):
     if request.method == 'POST':
         try:
