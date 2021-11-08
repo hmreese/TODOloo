@@ -63,16 +63,26 @@ def get_lists(username):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 200
-    
+
     elif request.method == 'POST':
-        listname = request.get_json()['name']
+        try:
+            listname = request.get_json()['listname']
+        except:
+            return jsonify({}), 400
         l = {'name': listname, 'tasks': []}
         ret = User().add_list(username, listname)
         return jsonify(ret)
 
     if request.method == 'DELETE':
-        return jsonify({}), 418
+        try:
+            listname = request.get_json()['listname']
+        except:
+            return jsonify({}), 400
+        if username is None or listname is None:
+            return jsonify({}), 400
 
+        ret = User().remove_list(username, listname)
+        return jsonify(ret), 200
 
 
 # friends returns user's friends

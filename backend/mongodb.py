@@ -74,11 +74,11 @@ class User(Model):
         users = list(self.collection.find({"username": username}))
         for user in users:
             user["_id"] = str(user["_id"])
-        return users  
+        return users
 
     def add_list(self, username, listname):
         query = {"username": username}
-        update = { 
+        update = {
             "$push": {
                 "lists": {
                     "name": listname,
@@ -90,5 +90,23 @@ class User(Model):
         options = {"upsert": False}
 
         ret = list(self.collection.update(query, update, options))
-        
+
+        return ret
+
+### HANNAH LOGIC please fix me I am broken
+    def remove_list(self, username, listname):
+        query = {"username": username}
+        update = {
+            "$push": {
+                "lists": {
+                    "name": listname,
+                    "public": False,
+                    "tasks": []
+                }
+            }
+        }
+        options = {"upsert": False}
+
+        ret = list(self.collection.update(query, update, options))
+
         return ret
