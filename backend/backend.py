@@ -67,12 +67,7 @@ def get_lists(username, listID):
         if taskIndex is None:
             return jsonify({}), 400
 
-
-        # if task index exsits in list
-        # ie return a task and if not null:
-        #   add new task
-        # else:
-        #   update cur task
+        #ret = User().post_task(username, lsitID, taskIndex)
         return jsonify({}), 200
 
     if request.method == 'DELETE':
@@ -84,7 +79,7 @@ def get_lists(username, listID):
             return jsonify({}), 400
 
         #hanna func
-        # ret = User().remove_task(username, listID)
+        # ret = User().remove_task(username, listID, taskIndex)
         return jsonify({}), 200
 
 # lists returns user's lists
