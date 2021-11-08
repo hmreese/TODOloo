@@ -43,7 +43,6 @@ py2app==0.7.3
 pycodestyle==2.8.0
 pycparser==2.19
 pymongo==3.12.0
-pyobjc-core==2.5.1
 pyobjc-framework-Accounts==2.5.1
 pyobjc-framework-AddressBook==2.5.1
 pyobjc-framework-AppleScriptKit==2.5.1
