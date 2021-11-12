@@ -56,8 +56,18 @@ def get_home(username):
     return jsonify(user), 200
 
 
-@app.route('/<username>/<listname>', methods=['POST', 'DELETE'])
+@app.route('/<username>/lists/<listname>', methods=['GET', 'POST', 'DELETE'])
 def get_task(username, listname):
+    if request.method == 'GET':
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        
+        for l in lists:
+            if l["name"] == listname:
+                return jsonify(l["tasks"]), 200
+
+        return jsonify({}), 400
+
     if request.method == 'POST':
         try:
             task_num = request.get_json()['task_num']
