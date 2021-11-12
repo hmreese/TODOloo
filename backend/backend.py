@@ -55,21 +55,24 @@ def get_home(username):
     user = User().find_by_username(username)
     return jsonify(user), 200
 
-
-# lists returns user's lists
-@app.route('/<username>/<listID>', methods=['POST', 'DELETE'])
-def get_task(username, listID):
+@app.route('/<username>/<listname>', methods=['POST', 'DELETE'])
+def get_task(username, listname):
     if request.method == 'POST':
         try:
             taskIndex = request.get_json()['taskIndex']
+            taskname = request.get_json()['taskname']
+            date = request.get_json()['date']
+            description = request.get_json()['description']
+            priority = request.get_json()['priority']
         except:
             return jsonify({}), 400
         if taskIndex is None:
             return jsonify({}), 400
 
-        #ret = User().post_task(username, lsitID, taskIndex)
+        ret = User().add_task(username, listname, taskname, date, description, priority, taskIndex)
         return jsonify({}), 200
 
+    # TODO: not yet functional
     if request.method == 'DELETE':
         try:
             taskIndex = request.get_json()['taskIndex']
@@ -78,16 +81,17 @@ def get_task(username, listID):
         if taskIndex is None:
             return jsonify({}), 400
 
-        #hanna func
+        #hannah func
         # ret = User().remove_task(username, listID, taskIndex)
         return jsonify({}), 200
 
 # lists returns user's lists
 @app.route('/<username>/lists', methods=['GET', 'POST', 'DELETE'])
 def get_lists(username):
+    user = User().find_by_username(username)
+    lists = user[0]["lists"]
+
     if request.method == 'GET':
-        user = User().find_by_username(username)
-        lists = user[0]["lists"]
         return jsonify(lists), 200
 
     elif request.method == 'POST':
@@ -95,10 +99,20 @@ def get_lists(username):
             listname = request.get_json()['listname']
         except:
             return jsonify({}), 400
-        l = {'name': listname, 'tasks': []}
-        ret = User().add_list(username, listname)
+        try:
+            public = request.get_json()['public']
+        except:
+            public = False
+
+        for l in lists:
+            if l["name"] == listname:
+                ret = User().update_list(username, listname, public)
+                return jsonify(ret)
+
+        ret = User().add_list(username, listname, public)
         return jsonify(ret)
 
+    # TODO: not yet functional
     if request.method == 'DELETE':
         try:
             listname = request.get_json()['listname']
@@ -106,7 +120,7 @@ def get_lists(username):
             return jsonify({}), 400
         if username is None or listname is None:
             return jsonify({}), 400
-        #hanna func
+        #hannah func
         # ret = User().remove_list(username, listname)
         return jsonify(ret), 200
 

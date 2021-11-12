@@ -76,13 +76,13 @@ class User(Model):
             user["_id"] = str(user["_id"])
         return users
 
-    def add_list(self, username, listname):
+    def add_list(self, username, listname, public):
         query = {"username": username}
         update = {
             "$push": {
                 "lists": {
                     "name": listname,
-                    "public": False,
+                    "public": public,
                     "completed": False,
                     "tasks": []
                 }
@@ -92,6 +92,47 @@ class User(Model):
         list(self.collection.update(query, update, False))
 
         return listname
+
+    # TODO: not yet functional
+    def update_list(self, username, listname, public):
+        query = {
+            "username": username,
+            "lists.name": listname
+        }
+        update = {
+            "$set": {
+                "list.$": {
+                    "public": public
+                }
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        return listname
+
+    def add_task(self, username, listname, taskname, date, description, priority, taskIndex):
+        # TODO use taskIndex to edit a task or create update_task func
+        
+        query = {
+            "username": username,
+            "lists.name": listname
+        }
+        update = {
+            "$push": {
+                "lists.$.tasks": {
+                    "title": taskname,
+                    "date": date,
+                    "completed": False,
+                    "description": description,
+                    "priority": priority
+                }
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        return taskname
 
 ### HANNAH LOGIC please fix me I am broken
     def remove_list(self, username, listname):
