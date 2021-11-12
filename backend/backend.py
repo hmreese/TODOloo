@@ -55,35 +55,38 @@ def get_home(username):
     user = User().find_by_username(username)
     return jsonify(user), 200
 
+
 @app.route('/<username>/<listname>', methods=['POST', 'DELETE'])
 def get_task(username, listname):
     if request.method == 'POST':
         try:
-            taskIndex = request.get_json()['taskIndex']
-            taskname = request.get_json()['taskname']
+            task_num = request.get_json()['task_num']
+            title = request.get_json()['title']
             date = request.get_json()['date']
             description = request.get_json()['description']
             priority = request.get_json()['priority']
+            completed = request.get_json()['completed']
         except:
             return jsonify({}), 400
-        if taskIndex is None:
+        if task_num is None or title is None or date is None or description is None or priority is None or completed is None:
             return jsonify({}), 400
 
-        ret = User().add_task(username, listname, taskname, date, description, priority, taskIndex)
+        ret = User().add_task(username, listname, title, date, description, priority, task_num)
         return jsonify({}), 200
 
     # TODO: not yet functional
     if request.method == 'DELETE':
         try:
-            taskIndex = request.get_json()['taskIndex']
+            task_num = request.get_json()['task_num']
         except:
             return jsonify({}), 400
-        if taskIndex is None:
+        if task_num is None:
             return jsonify({}), 400
 
         #hannah func
         # ret = User().remove_task(username, listID, taskIndex)
         return jsonify({}), 200
+
 
 # lists returns user's lists
 @app.route('/<username>/lists', methods=['GET', 'POST', 'DELETE'])
@@ -122,7 +125,7 @@ def get_lists(username):
             return jsonify({}), 400
         #hannah func
         # ret = User().remove_list(username, listname)
-        return jsonify(ret), 200
+        return jsonify({}), 200
 
 
 # friends returns user's friends
@@ -176,14 +179,8 @@ def create_user():
         print(hashedPas.hexdigest())
         user = {'username': username, 'password': str(hashedPas.hexdigest()), 'name': name, 'lists': [], 'friends': []}
 
-        # TODO add user data to database
         newUser = User(user)
         newUser.save()
         resp = jsonify({"username": username}), 201
 
         return resp
-
-        # if unsuccessful
-        # return jsonify({"username":username}),400
-
-        # return jsonify({"username": username}), 201

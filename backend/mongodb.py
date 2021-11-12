@@ -111,8 +111,8 @@ class User(Model):
 
         return listname
 
-    def add_task(self, username, listname, taskname, date, description, priority, taskIndex):
-        # TODO use taskIndex to edit a task or create update_task func
+    def add_task(self, username, listname, title, date, description, priority, task_num):
+        # TODO use task_num to edit a task or create update_task func
         
         query = {
             "username": username,
@@ -121,7 +121,7 @@ class User(Model):
         update = {
             "$push": {
                 "lists.$.tasks": {
-                    "title": taskname,
+                    "title": title,
                     "date": date,
                     "completed": False,
                     "description": description,
@@ -132,7 +132,7 @@ class User(Model):
 
         list(self.collection.update(query, update, False))
 
-        return taskname
+        return title
 
 ### HANNAH LOGIC please fix me I am broken
     def remove_list(self, username, listname):
