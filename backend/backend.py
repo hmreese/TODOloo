@@ -53,6 +53,7 @@ users = {
 @app.route('/<username>/home')
 def get_home(username):
     user = User().find_by_username(username)
+    user[0]["password"] = "nope"
     return jsonify(user), 200
 
 
@@ -99,7 +100,7 @@ def get_task(username, listname):
 
 
 # lists returns user's lists
-@app.route('/<username>/lists', methods=['GET', 'POST', 'DELETE'])
+@app.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
 def get_lists(username):
     user = User().find_by_username(username)
     lists = user[0]["lists"]
@@ -117,13 +118,28 @@ def get_lists(username):
         except:
             public = False
 
-        for l in lists:
-            if l["name"] == listname:
-                ret = User().update_list(username, listname, public)
-                return jsonify(ret)
-
         ret = User().add_list(username, listname, public)
         return jsonify(ret)
+
+    elif request.method == 'PATCH':
+        try:
+            listname = request.get_json()['listname']
+        except:
+            return jsonify({}), 400
+        try:
+            public = request.get_json()['public']
+            ret = User().update_public(username, listname, public)
+            return jsonify(ret)
+        except:
+            public = None
+        try:
+            completed = request.get_json()['completed']
+            ret = User().update_list_completed(username, listname, completed)
+            return jsonify(ret)
+        except:
+            completed = None
+
+        return jsonify({"No update information provided: public, completed"}), 400 # not sure about 400        
 
     # TODO: not yet functional
     if request.method == 'DELETE':

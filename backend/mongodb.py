@@ -93,23 +93,35 @@ class User(Model):
 
         return listname
 
-    # TODO: not yet functional
-    def update_list(self, username, listname, public):
+    def update_public(self, username, listname, public):
         query = {
             "username": username,
             "lists.name": listname
         }
         update = {
             "$set": {
-                "list.$": {
-                    "public": public
-                }
+                "lists.$.public": public
             }
         }
 
         list(self.collection.update(query, update, False))
 
-        return listname
+        return public
+
+    def update_list_completed(self, username, listname, completed):
+        query = {
+            "username": username,
+            "lists.name": listname
+        }
+        update = {
+            "$set": {
+                "lists.$.completed": completed
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        return completed
 
     def add_task(self, username, listname, title, date, description, priority, task_num):
         # TODO use task_num to edit a task or create update_task func
@@ -151,3 +163,20 @@ class User(Model):
         ret = list(self.collection.update(query, update, options))
 
         return ret
+
+    def add_friend(self, username, friend):
+        
+        query = {
+            "username": username,
+        }
+        update = {
+            "$push": {
+                "friends": {
+                    "$": friend
+                }
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        return title
