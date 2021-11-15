@@ -47,7 +47,7 @@ function NavBar({ user, setUser }) {
                 </NavLink>
               </li>
             )}
-            {!user && (
+            {user && (
               <>
                 <li className="nav-item">
                   <NavLink
