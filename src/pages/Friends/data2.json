@@ -1,0 +1,41 @@
+[{
+    "id": 1,
+    "name": "Friend1",
+    "complete": false,
+    "opened": false,
+    "list": {
+        "id": 1,
+        "name": "Take out trash",
+        "complete": true
+      }
+  },{
+    "id": 2,
+    "name": "Friend2",
+    "complete": false,
+    "opened": false,
+    "list": {
+        "id": 1,
+        "name": "Reevaluate life decisions",
+        "complete": true
+      }
+  },{
+    "id": 3,
+    "name": "Friend3",
+    "complete": false,
+    "opened": false,
+    "list": {
+        "id": 1,
+        "name": "Tell mom im sorry",
+        "complete": true
+      }
+  },{
+    "id": 4,
+    "name": "Friend4",
+    "complete": false,
+    "opened": false,
+    "list": {
+        "id": 1,
+        "name": "Binge Narcos",
+        "complete": true
+      }
+  }]
