@@ -57,7 +57,6 @@ const Login = ({user, setUser}) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      console.log(res)
       if (res.status === 201) {
         const userObj = await res.json();
         await localStorage.setItem('user', JSON.stringify(userObj))
@@ -82,7 +81,6 @@ const Login = ({user, setUser}) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      console.log(res)
       if (res.status === 200) {
         const userObj = await res.json();
         await localStorage.setItem('user', JSON.stringify(userObj))

@@ -40,7 +40,7 @@ const Routes = () => {
         <div className="contentWrap">
           <Switch>
             <PrivateRoute path="/dashboard" component={Dashboard} />
-            <PrivateRoute path="/friends" component={Friends} />
+            <Route path="/friends" component={Friends} />
             <PrivateRoute path="/lists" component={Lists} />
             <Route exact path="/login">
               {user ? (
