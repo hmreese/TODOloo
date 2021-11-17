@@ -6,48 +6,10 @@ import json
 from flask_cors import CORS
 from mongodb import User
 
+
 app = Flask(__name__)
 CORS(app)
 
-users = {
-    'users_list': []
-}
-
-# HIGH = 3
-# MED = 2
-# LOW = 1
-
-# users = {
-#     'users_list': [
-#         {
-#             "name": "Hannah",
-#             "username": "hreese",
-#             "password": "123",
-#             "lists": {
-#                 "School":{
-#                     "tasks": [
-#                         {
-#                             "task_num": 0,
-#                             "title": "DIE",
-#                             "date": "10-22-21",
-#                             "description": "it is important",
-#                             "priority": HIGH,
-#                             "completed": False
-#                         },
-#                         {
-#                             "task_num" : 1,
-#                             "title": "Work",
-#                             "date": "10-23-21",
-#                             "description": "it is important",
-#                             "priority": MED,
-#                             "completed": False
-#                         }
-#                     ]
-#                 }
-#             }
-#         }
-#     ]
-# }
 
 # home returns whole user json
 @app.route('/<username>/home')
@@ -57,7 +19,7 @@ def get_home(username):
     return jsonify(user), 200
 
 
-@app.route('/<username>/lists/<listname>', methods=['GET', 'POST', 'DELETE'])
+@app.route('/<username>/lists/<listname>', methods=['GET', 'POST', 'DELETE', 'PATCH'])
 def get_task(username, listname):
     if request.method == 'GET':
         user = User().find_by_username(username)
@@ -84,6 +46,17 @@ def get_task(username, listname):
 
         ret = User().add_task(username, listname, title, date, description, priority, task_num)
         return jsonify({}), 200
+
+    ## come back!!!!
+    if request.method == 'PATCH':
+        try:
+            completed = request.get_json()['completed']
+        except:
+            return jsonify({}), 400
+
+        #ret = User().complete_task(username, completed)
+        return jsonify({}), 200
+
 
     # TODO: not yet functional
     if request.method == 'DELETE':
@@ -172,7 +145,7 @@ def get_friends(username):
         except:
             return jsonify({}), 400
         ret = User().add_friend(username, fUsername)
-        return jsonify({ret}), 200
+        return jsonify(ret), 200
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -223,6 +196,7 @@ def create_user():
         resp = jsonify({"username": username}), 201
 
         return resp
+
 
 @app.route('/admin', methods=['GET'])
 def admin_stats():
