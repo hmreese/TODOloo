@@ -172,6 +172,27 @@ def login():
 
         return jsonify({"username": username}), 200
 
+@app.route('/api/auth', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        ret = request.get_json()
+        try:
+            username = ret["username"]
+            password = ret["password"]
+        except:
+            return jsonify({}), 400
+
+        if password is None or username is None:
+            return jsonify({}), 400
+        hashedPas = hashlib.sha256(password.encode())
+
+        resp = User().find_by_username(username)
+
+        if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
+            return jsonify({"username":username}),400
+
+        return jsonify({"username": username}), 200
+
 
 @app.route('/api/users', methods=['POST'])
 def create_user():
