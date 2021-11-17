@@ -61,7 +61,7 @@ def get_task(username, listname):
     if request.method == 'GET':
         user = User().find_by_username(username)
         lists = user[0]["lists"]
-        
+
         for l in lists:
             if l["name"] == listname:
                 return jsonify(l["tasks"]), 200
@@ -139,11 +139,20 @@ def get_lists(username):
 
 
 # friends returns user's friends
-@app.route('/<username>/friends')
+@app.route('/<username>/friends',  methods=['GET', 'POST'])
 def get_friends(username):
-    user = User().find_by_username(username)
-    lists = user[0]["friends"]
-    return jsonify(lists), 200
+    if request.method == 'GET':
+        user = User().find_by_username(username)
+        lists = user[0]["friends"]
+        return jsonify(lists), 200
+    elif request.method == 'POST':
+        try:
+            fUsername = request.get_json()['friend_username']
+        except:
+            return jsonify({}), 400
+        ## hannah func
+        # add friend to users list
+        return jsonify({}), 200
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -194,3 +203,14 @@ def create_user():
         resp = jsonify({"username": username}), 201
 
         return resp
+
+@app.route('/admin', methods=['GET'])
+def admin_stats():
+    if request.method == 'GET':
+        resp = User().find_all()
+        numusers = len(resp)
+        count = 0
+        for i in resp:
+            count += len(i["lists"])
+        done = jsonify({"number_of_users": numusers, "number_of_lists": count}), 200
+        return done
