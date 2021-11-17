@@ -47,16 +47,16 @@ def get_task(username, listname):
         ret = User().add_task(username, listname, title, date, description, priority, task_num)
         return jsonify({}), 200
 
-    ## come back!!!!
     if request.method == 'PATCH':
         try:
             completed = request.get_json()['completed']
+            task_num = request.get_json()['task_num']
+
         except:
             return jsonify({}), 400
 
-        ret = User().complete_task(username, completed)
-        return jsonify({}), 200
-
+        ret = User().complete_task(username, listname, task_num, completed)
+        return jsonify(ret), 200
 
     # TODO: not yet functional
     if request.method == 'DELETE':
@@ -149,7 +149,7 @@ def get_friends(username):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def login():
+def hello():
     if request.method == 'GET':
         return 'Hello, World!'
 
