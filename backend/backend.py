@@ -54,7 +54,7 @@ def get_task(username, listname):
         except:
             return jsonify({}), 400
 
-        #ret = User().complete_task(username, completed)
+        ret = User().complete_task(username, completed)
         return jsonify({}), 200
 
 
