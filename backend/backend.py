@@ -166,9 +166,8 @@ def get_friends(username):
             fUsername = request.get_json()['friend_username']
         except:
             return jsonify({}), 400
-        ## hannah func
-        # add friend to users list
-        return jsonify({}), 200
+        ret = User().add_friend(username, fUsername)
+        return jsonify({ret}), 200
 
 
 @app.route('/', methods=['GET', 'POST'])

@@ -171,12 +171,10 @@ class User(Model):
         }
         update = {
             "$push": {
-                "friends": {
-                    "$": friend
-                }
+                "friends": friend
             }
         }
 
         list(self.collection.update(query, update, False))
 
-        return title
+        return friend
