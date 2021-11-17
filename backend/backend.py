@@ -149,7 +149,7 @@ def get_friends(username):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def login():
+def hello():
     if request.method == 'GET':
         return 'Hello, World!'
 
