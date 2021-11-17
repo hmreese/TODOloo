@@ -101,7 +101,7 @@ def get_lists(username):
             return jsonify({}), 400
         try:
             public = request.get_json()['public']
-            ret = User().update_public(username, listname, public)
+            ret = User().update_list_public(username, listname, public)
             return jsonify(ret)
         except:
             public = None
@@ -123,8 +123,8 @@ def get_lists(username):
         if username is None or listname is None:
             return jsonify({}), 400
         #hannah func
-        # ret = User().remove_list(username, listname)
-        return jsonify({}), 200
+        ret = User().remove_list(username, listname)
+        return jsonify(ret), 201
 
 
 # friends returns user's friends
@@ -171,6 +171,7 @@ def helloWorld():
             return jsonify({"username":username}),400
 
         return jsonify({"username": username}), 200
+
 
 @app.route('/api/auth', methods=['POST'])
 def login():

@@ -6,9 +6,6 @@ from dotenv import load_dotenv
 
 
 class Model(dict):
-    """
-    A simple model that wraps mongodb document
-    """
     __getattr__ = dict.get
     __delattr__ = dict.__delitem__
     __setattr__ = dict.__setitem__
@@ -49,8 +46,6 @@ class User(Model):
     MONGODB_URI = os.environ['MONGODB_URI']
     db_client = pymongo.MongoClient(MONGODB_URI)
 
-    # db_client = pymongo.MongoClient('localhost', 27017)
-    # change if your db is in another host and port
     # db name is 'users' and collection name is 'users_list'
     collection = db_client["users"]["users_list"]
 
@@ -98,10 +93,10 @@ class User(Model):
 
         list(self.collection.update(query, update, False))
 
-        return listname
+        return listname ## TODO: return list json
 
 
-    def update_public(self, username, listname, public):
+    def update_list_public(self, username, listname, public):
         query = {
             "username": username,
             "lists.name": listname
@@ -131,6 +126,25 @@ class User(Model):
         list(self.collection.update(query, update, False))
 
         return completed
+
+
+### HANNAH LOGIC please fix me I am broken
+    def remove_list(self, username, listname):
+        query = {
+            "username": username,
+        }
+
+        update = {
+            "$pull": {
+                "lists" : {
+                    "name": listname
+                }
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        return listname
 
 
     def add_task(self, username, listname, title, date, description, priority, task_num):
@@ -170,24 +184,6 @@ class User(Model):
 
         return {"task": task_num, "completed": completed}
 
-
-### HANNAH LOGIC please fix me I am broken
-    def remove_list(self, username, listname):
-        query = {"username": username}
-        update = {
-            "$push": {
-                "lists": {
-                    "name": listname,
-                    "public": False,
-                    "tasks": []
-                }
-            }
-        }
-        options = {"upsert": False}
-
-        ret = list(self.collection.update(query, update, options))
-
-        return ret
 
     def add_friend(self, username, friend):
 
