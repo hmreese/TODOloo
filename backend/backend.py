@@ -205,11 +205,10 @@ def create_user():
         except:
             return jsonify({}), 418
 
-        if password is None or username is None:
+        if password is None or username is None or len(User().find_by_username(username)) > 0:
             return jsonify({}), 418
 
         hashedPas = hashlib.sha256(password.encode())
-        print(hashedPas.hexdigest())
         user = {'username': username, 'password': str(hashedPas.hexdigest()), 'name': name, 'lists': [], 'friends': []}
 
         newUser = User(user)

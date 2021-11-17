@@ -125,7 +125,7 @@ class User(Model):
 
     def add_task(self, username, listname, title, date, description, priority, task_num):
         # TODO use task_num to edit a task or create update_task func
-        
+
         query = {
             "username": username,
             "lists.name": listname
@@ -146,11 +146,11 @@ class User(Model):
 
         return title
 
-    def complete_task(self, username, completed)
-    {
-        
+    # def complete_task(self, username, completed)
+    # {
 
-    }
+
+    # }
 
 ### HANNAH LOGIC please fix me I am broken
     def remove_list(self, username, listname):
@@ -171,7 +171,7 @@ class User(Model):
         return ret
 
     def add_friend(self, username, friend):
-        
+
         query = {
             "username": username,
         }
