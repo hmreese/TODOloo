@@ -139,7 +139,7 @@ def get_lists(username):
         except:
             completed = None
 
-        return jsonify({"No update information provided: public, completed"}), 400 # not sure about 400        
+        return jsonify({"No update information provided: public, completed"}), 400 # not sure about 400
 
     # TODO: not yet functional
     if request.method == 'DELETE':
@@ -158,9 +158,14 @@ def get_lists(username):
 @app.route('/<username>/friends',  methods=['GET', 'POST'])
 def get_friends(username):
     if request.method == 'GET':
+        friendList = []
         user = User().find_by_username(username)
         lists = user[0]["friends"]
-        return jsonify(lists), 200
+        for i in lists:
+            fren = User().find_by_username(i)
+            fren[0]["password"] = "you are not a TeaPot"
+            friendList.append(fren)
+        return jsonify(friendList), 200
     elif request.method == 'POST':
         try:
             fUsername = request.get_json()['friend_username']
