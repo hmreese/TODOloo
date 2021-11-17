@@ -146,6 +146,11 @@ class User(Model):
 
         return title
 
+    # def complete_task(self, username, completed)
+    # {
+
+    # }
+
 ### HANNAH LOGIC please fix me I am broken
     def remove_list(self, username, listname):
         query = {"username": username}
