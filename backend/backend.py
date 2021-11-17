@@ -149,7 +149,7 @@ def get_friends(username):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def login():
+def helloWorld():
     if request.method == 'GET':
         return 'Hello, World!'
 
@@ -198,11 +198,13 @@ def login():
 def create_user():
     if request.method == 'POST':
         ret = request.get_json()
+        print(ret)
         try:
             username = ret["username"]
             password = ret["password"]
             name = ret["name"]
         except:
+            print("wrong teapot")
             return jsonify({}), 418
 
         if password is None or username is None or len(User().find_by_username(username)) > 0:
