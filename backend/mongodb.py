@@ -190,7 +190,7 @@ class User(Model):
         return ret
 
     def add_friend(self, username, friend):
-        
+
         query = {
             "username": username,
         }
