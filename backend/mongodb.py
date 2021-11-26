@@ -93,7 +93,7 @@ class User(Model):
 
         list(self.collection.update(query, update, False))
 
-        return listname ## TODO: return list json
+        return listname
 
 
     def update_list_public(self, username, listname, public):

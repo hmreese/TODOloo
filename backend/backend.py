@@ -92,6 +92,9 @@ def get_lists(username):
             public = False
 
         ret = User().add_list(username, listname, public)
+        if ret == listname:
+            return jsonify(ret_list(username, listname))
+
         return jsonify(ret)
 
     elif request.method == 'PATCH':
@@ -121,9 +124,9 @@ def get_lists(username):
             return jsonify({}), 400
         if username is None or listname is None:
             return jsonify({}), 400
-        #hannah func
+
         ret = User().remove_list(username, listname)
-        return jsonify(ret), 201
+        return jsonify(ret), 204
 
 
 # friends returns user's friends
@@ -231,3 +234,14 @@ def admin_stats():
             count += len(i["lists"])
         done = jsonify({"number_of_users": numusers, "number_of_lists": count}), 200
         return done
+
+
+def ret_list(username, listname):
+    user = User().find_by_username(username)
+    lists = user[0]["lists"]
+
+    for l in lists:
+        if l['name'] == listname:
+            return l
+    
+    return {}
