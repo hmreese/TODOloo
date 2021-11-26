@@ -58,18 +58,16 @@ def get_task(username, listname):
         ret = User().complete_task(username, listname, task_num, completed)
         return jsonify(ret), 200
 
-    # TODO: not yet functional
     if request.method == 'DELETE':
         try:
             task_num = request.get_json()['task_num']
         except:
             return jsonify({}), 400
-        if task_num is None:
-            return jsonify({}), 400
+        # if task_num is None:                  when would it be None
+        #     return jsonify({}), 400 
 
-        #hannah func
-        # ret = User().remove_task(username, listID, taskIndex)
-        return jsonify({}), 200
+        ret = User().remove_task(username, listname, task_num)
+        return jsonify(ret), 200
 
 
 # lists returns user's lists
@@ -105,13 +103,13 @@ def get_lists(username):
         try:
             public = request.get_json()['public']
             ret = User().update_list_public(username, listname, public)
-            return jsonify(ret)
+            return jsonify(ret) #TODO: also return list?
         except:
             public = None
         try:
             completed = request.get_json()['completed']
             ret = User().update_list_completed(username, listname, completed)
-            return jsonify(ret)
+            return jsonify(ret) #TODO: also return list?
         except:
             completed = None
 

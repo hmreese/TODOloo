@@ -128,7 +128,6 @@ class User(Model):
         return completed
 
 
-### HANNAH LOGIC please fix me I am broken
     def remove_list(self, username, listname):
         query = {
             "username": username,
@@ -183,6 +182,30 @@ class User(Model):
         list(self.collection.update(query, update, False))
 
         return {"task": task_num, "completed": completed}
+
+
+    def remove_task(self, username, listname, task_num):
+        query = {
+            "username": username,
+            "lists.name": listname,
+        }
+        update = {
+            "$unset": {
+                "lists.$.tasks.{0}".format(task_num): 1
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        update = {
+            "$pull": {
+                "lists.$.tasks": None
+            }
+        }
+
+        ret = list(self.collection.update(query, update, False))
+        
+        return ret
 
 
     def add_friend(self, username, friend):
