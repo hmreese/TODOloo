@@ -11,7 +11,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-# home returns whole user json
 @app.route('/<username>/home')
 def get_home(username):
     user = User().find_by_username(username)
@@ -38,11 +37,8 @@ def get_task(username, listname):
             date = request.get_json()['date']
             description = request.get_json()['description']
             priority = request.get_json()['priority']
-            # completed = request.get_json()['completed']
         except:
             return jsonify({}), 400
-        # if task_num is None or title is None or date is None or description is None or priority is None or completed is None:
-        #     return jsonify({}), 400
 
         ret = User().add_task(username, listname, title, date, description, priority, task_num)
         return jsonify(ret), 200
@@ -63,14 +59,11 @@ def get_task(username, listname):
             task_num = request.get_json()['task_num']
         except:
             return jsonify({}), 400
-        # if task_num is None:                  when would it be None
-        #     return jsonify({}), 400 
 
         ret = User().remove_task(username, listname, task_num)
         return jsonify(ret), 200
 
 
-# lists returns user's lists
 @app.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
 def get_lists(username):
     user = User().find_by_username(username)
@@ -103,17 +96,17 @@ def get_lists(username):
         try:
             public = request.get_json()['public']
             ret = User().update_list_public(username, listname, public)
-            return jsonify(ret) #TODO: also return list?
+            return jsonify(ret)  # TODO: also return list?
         except:
             public = None
         try:
             completed = request.get_json()['completed']
             ret = User().update_list_completed(username, listname, completed)
-            return jsonify(ret) #TODO: also return list?
+            return jsonify(ret)  # TODO: also return list?
         except:
             completed = None
 
-        return jsonify({"No update information provided: public, completed"}), 400 # not sure about 400
+        return jsonify({"No update information provided: public, completed"}), 400
 
     if request.method == 'DELETE':
         try:
@@ -127,7 +120,6 @@ def get_lists(username):
         return jsonify(ret), 204
 
 
-# friends returns user's friends
 @app.route('/<username>/friends',  methods=['GET', 'POST'])
 def get_friends(username):
     if request.method == 'GET':
@@ -169,7 +161,7 @@ def helloWorld():
         resp = User().find_by_username(username)
 
         if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
-            return jsonify({"username":username}),400
+            return jsonify({"username": username}), 400
 
         return jsonify({"username": username}), 200
 
@@ -191,7 +183,7 @@ def login():
         resp = User().find_by_username(username)
 
         if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
-            return jsonify({"username":username}),400
+            return jsonify({"username": username}), 400
 
         return jsonify({"username": username}), 200
 
@@ -241,5 +233,5 @@ def ret_list(username, listname):
     for l in lists:
         if l['name'] == listname:
             return l
-    
+
     return {}

@@ -18,7 +18,6 @@ class Model(dict):
                 {"_id": ObjectId(self._id)}, self)
         self._id = str(self._id)
 
-
     def reload(self):
         if self._id:
             result = self.collection.find_one({"_id": ObjectId(self._id)})
@@ -28,7 +27,6 @@ class Model(dict):
                 return True
         return False
 
-
     def remove(self):
         if self._id:
             resp = self.collection.remove({"_id": ObjectId(self._id)})
@@ -37,11 +35,6 @@ class Model(dict):
 
 
 class User(Model):
-    # to use a .env file, create .env and include a statmement
-    # MONGODB_URI='mongodb+srv://<atlas-user>:<password>@cluster0.6f9re.mongodb.net/<myFirstDatabase>?retryWrites=true&w=majority'
-    # with <atlas-user>, <password> and <myFirstDatabase> updated accordingly
-    # make sure .env is in .gitignore so that your password isn't relased into the wild
-
     load_dotenv()  # take environment variables from .env.
     MONGODB_URI = os.environ['MONGODB_URI']
     db_client = pymongo.MongoClient(MONGODB_URI)
@@ -49,13 +42,11 @@ class User(Model):
     # db name is 'users' and collection name is 'users_list'
     collection = db_client["users"]["users_list"]
 
-
     def find_all(self):
         users = list(self.collection.find())
         for user in users:
             user["_id"] = str(user["_id"])
         return users
-
 
     def find_by_name(self, name):
         users = list(self.collection.find({"name": name}))
@@ -63,20 +54,17 @@ class User(Model):
             user["_id"] = str(user["_id"])
         return users
 
-
     def find_by_id(self, id):
         users = list(self.collection.find({"_id": ObjectId(id)}))
         for user in users:
             user["_id"] = str(user["_id"])
         return user["lists"]
 
-
     def find_by_username(self, username):
         users = list(self.collection.find({"username": username}))
         for user in users:
             user["_id"] = str(user["_id"])
         return users
-
 
     def add_list(self, username, listname, public):
         query = {"username": username}
@@ -95,7 +83,6 @@ class User(Model):
 
         return listname
 
-
     def update_list_public(self, username, listname, public):
         query = {
             "username": username,
@@ -110,7 +97,6 @@ class User(Model):
         list(self.collection.update(query, update, False))
 
         return public
-
 
     def update_list_completed(self, username, listname, completed):
         query = {
@@ -127,7 +113,6 @@ class User(Model):
 
         return completed
 
-
     def remove_list(self, username, listname):
         query = {
             "username": username,
@@ -135,7 +120,7 @@ class User(Model):
 
         update = {
             "$pull": {
-                "lists" : {
+                "lists": {
                     "name": listname
                 }
             }
@@ -145,7 +130,7 @@ class User(Model):
 
         return listname
 
-
+    # TODO: task_num not necessary, remove?
     def add_task(self, username, listname, title, date, description, priority, task_num):
         query = {
             "username": username,
@@ -167,7 +152,6 @@ class User(Model):
 
         return title
 
-
     def complete_task(self, username, listname, task_num, completed):
         query = {
             "username": username,
@@ -182,7 +166,6 @@ class User(Model):
         list(self.collection.update(query, update, False))
 
         return {"task": task_num, "completed": completed}
-
 
     def remove_task(self, username, listname, task_num):
         query = {
@@ -203,10 +186,9 @@ class User(Model):
             }
         }
 
-        ret = list(self.collection.update(query, update, False))
-        
-        return ret
+        list(self.collection.update(query, update, False))
 
+        return task_num
 
     def add_friend(self, username, friend):
 
