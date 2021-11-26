@@ -38,14 +38,14 @@ def get_task(username, listname):
             date = request.get_json()['date']
             description = request.get_json()['description']
             priority = request.get_json()['priority']
-            completed = request.get_json()['completed']
+            # completed = request.get_json()['completed']
         except:
             return jsonify({}), 400
-        if task_num is None or title is None or date is None or description is None or priority is None or completed is None:
-            return jsonify({}), 400
+        # if task_num is None or title is None or date is None or description is None or priority is None or completed is None:
+        #     return jsonify({}), 400
 
         ret = User().add_task(username, listname, title, date, description, priority, task_num)
-        return jsonify({}), 200
+        return jsonify(ret), 200
 
     if request.method == 'PATCH':
         try:
@@ -114,7 +114,6 @@ def get_lists(username):
 
         return jsonify({"No update information provided: public, completed"}), 400 # not sure about 400
 
-    # TODO: not yet functional
     if request.method == 'DELETE':
         try:
             listname = request.get_json()['listname']
@@ -139,6 +138,7 @@ def get_friends(username):
             fren[0]["password"] = "you are not a TeaPot"
             friendList.append(fren)
         return jsonify(friendList), 200
+
     elif request.method == 'POST':
         try:
             fUsername = request.get_json()['friend_username']
