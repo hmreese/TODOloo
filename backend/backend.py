@@ -47,7 +47,6 @@ def get_task(username, listname):
         try:
             completed = request.get_json()['completed']
             task_num = request.get_json()['task_num']
-
         except:
             return jsonify({}), 400
 
@@ -144,7 +143,7 @@ def get_friends(username):
 @app.route('/', methods=['GET', 'POST'])
 def helloWorld():
     if request.method == 'GET':
-        return 'Hello, World!'
+        return jsonify('Hello, World!'), 200
 
     if request.method == 'POST':
         ret = request.get_json()
