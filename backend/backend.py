@@ -30,10 +30,8 @@ def get_task(username, listname):
 
         return jsonify({}), 400
 
-    # TODO: remove tasknum field from post
     if request.method == 'POST':
         try:
-            task_num = request.get_json()['task_num']
             title = request.get_json()['title']
             date = request.get_json()['date']
             description = request.get_json()['description']
@@ -41,7 +39,7 @@ def get_task(username, listname):
         except:
             return jsonify({}), 400
 
-        ret = User().add_task(username, listname, title, date, description, priority, task_num)
+        ret = User().add_task(username, listname, title, date, description, priority)
         return jsonify({"title": ret}), 200
 
     if request.method == 'PATCH':
@@ -162,29 +160,7 @@ def helloWorld():
             return jsonify({"username": username}), 400
 
         return jsonify({"username": username}), 200
-
-# TODO: remove?
-# @app.route('/api/auth', methods=['POST'])
-# def login():
-#     if request.method == 'POST':
-#         ret = request.get_json()
-#         try:
-#             username = ret["username"]
-#             password = ret["password"]
-#         except:
-#             return jsonify({}), 400
-
-#         if password is None or username is None:
-#             return jsonify({}), 400
-#         hashedPas = hashlib.sha256(password.encode())
-
-#         resp = User().find_by_username(username)
-
-#         if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
-#             return jsonify({"username": username}), 400
-
-#         return jsonify({"username": username}), 200
-
+        
 
 @app.route('/api/users', methods=['POST'])
 def create_user():

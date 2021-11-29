@@ -130,8 +130,7 @@ class User(Model):
 
         return listname
 
-    # TODO: task_num not necessary, remove?
-    def add_task(self, username, listname, title, date, description, priority, task_num):
+    def add_task(self, username, listname, title, date, description, priority):
         query = {
             "username": username,
             "lists.name": listname
