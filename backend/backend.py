@@ -40,7 +40,7 @@ def get_task(username, listname):
             return jsonify({}), 400
 
         ret = User().add_task(username, listname, title, date, description, priority)
-        return jsonify({"title": ret}), 200
+        return jsonify(ret_task(username, listname, -1)), 200
 
     if request.method == 'PATCH':
         try:
@@ -50,7 +50,7 @@ def get_task(username, listname):
             return jsonify({}), 400
 
         ret = User().complete_task(username, listname, task_num, completed)
-        return jsonify(ret), 200
+        return jsonify(ret_task(username, listname, task_num)), 200
 
     if request.method == 'DELETE':
         try:
@@ -59,7 +59,7 @@ def get_task(username, listname):
             return jsonify({}), 400
 
         ret = User().remove_task(username, listname, task_num)
-        return jsonify(ret), 200
+        return jsonify({"task_deleted": task_num}), 204
 
 
 @app.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
@@ -83,7 +83,6 @@ def get_lists(username):
         ret = User().add_list(username, listname, public)
         return jsonify(ret_list(username, listname)), 200
 
-
     elif request.method == 'PATCH':
         try:
             listname = request.get_json()['listname']
@@ -92,19 +91,19 @@ def get_lists(username):
         try:
             public = request.get_json()['public']
             ret = User().update_list_public(username, listname, public)
-            return jsonify(ret)  # TODO: also return list? do it!
+            return jsonify(ret_list(username, listname)), 200
         except:
             public = None
         try:
             completed = request.get_json()['completed']
             ret = User().update_list_completed(username, listname, completed)
-            return jsonify(ret)  # TODO: also return list?
+            return jsonify(ret_list(username, listname)), 200
         except:
             completed = None
 
         return jsonify({"No update information provided: public, completed"}), 400
 
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         try:
             listname = request.get_json()['listname']
         except:
@@ -134,7 +133,7 @@ def get_friends(username):
         except:
             return jsonify({}), 400
         ret = User().add_friend(username, fUsername)
-        return jsonify(ret), 200
+        return jsonify({'friend': ret}), 200
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -142,7 +141,7 @@ def helloWorld():
     if request.method == 'GET':
         return jsonify('Hello, World!'), 200
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
         ret = request.get_json()
         try:
             username = ret["username"]
@@ -175,6 +174,7 @@ def create_user():
             print("wrong teapot")
             return jsonify({}), 418
 
+        # TODO: @michael should we add an error message for "that username already exists"
         if password is None or username is None or len(User().find_by_username(username)) > 0:
             return jsonify({}), 418
 
@@ -207,5 +207,15 @@ def ret_list(username, listname):
     for l in lists:
         if l['name'] == listname:
             return l
+
+    return {}
+
+def ret_task(username, listname, task_num):
+    user = User().find_by_username(username)
+    lists = user[0]["lists"]
+
+    for l in lists:
+        if l['name'] == listname:
+            return l['tasks'][task_num]
 
     return {}

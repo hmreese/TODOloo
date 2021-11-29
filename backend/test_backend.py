@@ -1,4 +1,4 @@
-from backend import ret_list
+from backend import ret_list, ret_task
 import pytest
 from flask.globals import request
 
@@ -17,6 +17,7 @@ def test_get_hello():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
+
 def test_get_home():
     resp = requests.get('https://todoloo307.herokuapp.com/{0}/home'.format('hreese'))
     if (resp):
@@ -24,6 +25,7 @@ def test_get_home():
         assert (r[0]['username'] == 'hreese')
     else:
         pytest.fail("Request failed: ", resp.status_code)
+
 
 def test_get_lists():
     resp = requests.get('https://todoloo307.herokuapp.com/{0}/lists'.format('hreese'))
@@ -33,6 +35,7 @@ def test_get_lists():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
+
 def test_get_friends():
     resp = requests.get('https://todoloo307.herokuapp.com/{0}/friends'.format('hreese'))
     if (resp):
@@ -41,6 +44,7 @@ def test_get_friends():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
+
 def test_get_task():
     resp = requests.get('https://todoloo307.herokuapp.com/{0}/lists/{1}'.format('hreese', 'School'))
     if (resp):
@@ -48,6 +52,7 @@ def test_get_task():
         assert (r[0]['title'] == 'Math Homework')
     else:
         pytest.fail("Request failed: ", resp.status_code)
+
 
 # TODO: michael todo
 # def test_get_admin_stats():
@@ -74,6 +79,7 @@ def test_create_user():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
+
 def test_login(): 
     user = {
         "username": "testMcTesterson",
@@ -87,6 +93,7 @@ def test_login():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
+
 def test_add_list():
     new_list = {
         "listname": "test_list"
@@ -99,9 +106,9 @@ def test_add_list():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
+
 def test_add_task():
     task = {
-        "task_num": 0,
         "title": "tester",
         "date": "11-11-2021",
         "description": "N/A",
@@ -111,10 +118,41 @@ def test_add_task():
     resp = requests.post('https://todoloo307.herokuapp.com/testMcTesterson/lists/test_list', json=task)
     if (resp):
         r = resp.json()
-        print(r)
         assert ((r['title'] == 'tester') and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
+
+
+def test_add_friend():
+    friend = {
+        "friend_username": "hreese"
+    }
+
+    resp = requests.post('https://todoloo307.herokuapp.com/testMcTesterson/friends', json=friend)
+    if (resp):
+        r = resp.json()
+        assert ((r['friend'] == 'hreese') and (resp.status_code == 200))
+    else:
+        pytest.fail("Request failed: ", resp.status_code)
+
+## PATCH TESTS ##
+
+
+## DELETE TESTS ##
+
+def test_delete_task():
+    task = {
+        "task_num": 0
+    }
+
+    resp = requests.delete('https://todoloo307.herokuapp.com/testMcTesterson/lists/test_list', json=task)
+    if (resp):
+        r = resp.json()
+        assert ((r['task_deleted'] == 0) and (resp.status_code == 204))
+    else:
+        pytest.fail("Request failed: ", resp.status_code)
+
+#def test_delete_list():
 
 ## HELPER TESTS ##
 
@@ -130,7 +168,23 @@ def test_ret_list():
     }
 
     ret = ret_list(username, listname)
-    print(ret)
+
+    assert(ret == expected)
+
+
+def test_ret_task():
+    username = 'hreese'
+    listname = 'School'
+
+    expected = {
+        "completed": True,
+        "date": "10-22-2021",
+        "description": "Problems 1-30",
+        "priority": 3,
+        "title": "Math Homework"
+    }
+
+    ret = ret_task(username, listname, 0)
 
     assert(ret == expected)
 
@@ -138,3 +192,4 @@ def test_ret_list():
 
 # @pytest.fixture(scope="session", autouse=True)
 # def cleanup():
+# remove testMcTesterson
