@@ -17,7 +17,7 @@ def test_get_hello():
     else:
         pytest.fail("Request failed")
 
-def test_get_user():
+def test_get_home():
     resp = requests.get('https://todoloo307.herokuapp.com/{0}/home'.format('hreese'))
     if (resp):
         r = resp.json()
@@ -49,6 +49,14 @@ def test_get_task():
     else:
         pytest.fail("Request failed")
 
+# TODO: michael todo
+# def test_get_admin_stats():
+#     resp = requests.get('https://todoloo307.herokuapp.com/admin')
+#     if (resp):
+#         r = resp.json()
+#         # assert something
+#     else:
+#         pytest.fail("Request failed")    
 
 ## HELPER FUNCTIONS ##
 
