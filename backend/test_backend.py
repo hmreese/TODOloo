@@ -50,13 +50,13 @@ def test_get_task():
         pytest.fail("Request failed: ", resp.status_code)
 
 # TODO: michael todo
-# def test_get_admin_stats():
-#     resp = requests.get('https://todoloo307.herokuapp.com/admin')
-#     if (resp):
-#         r = resp.json()
-#         # assert something
-#     else:
-#         pytest.fail("Request failed")    
+def test_get_admin_stats():
+    resp = requests.get('https://todoloo307.herokuapp.com/admin')
+    if (resp):
+        r = resp.json()
+        assert (len(r) != 0)
+    else:
+        pytest.fail("Request failed")    
 
 ## POST TESTS ##
 
