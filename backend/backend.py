@@ -30,6 +30,7 @@ def get_task(username, listname):
 
         return jsonify({}), 400
 
+    # TODO: remove tasknum field from post
     if request.method == 'POST':
         try:
             task_num = request.get_json()['task_num']
@@ -41,7 +42,7 @@ def get_task(username, listname):
             return jsonify({}), 400
 
         ret = User().add_task(username, listname, title, date, description, priority, task_num)
-        return jsonify(ret), 200
+        return jsonify({"title": ret}), 200
 
     if request.method == 'PATCH':
         try:
@@ -82,10 +83,8 @@ def get_lists(username):
             public = False
 
         ret = User().add_list(username, listname, public)
-        if ret == listname:
-            return jsonify(ret_list(username, listname))
+        return jsonify(ret_list(username, listname)), 200
 
-        return jsonify(ret)
 
     elif request.method == 'PATCH':
         try:
@@ -164,27 +163,27 @@ def helloWorld():
 
         return jsonify({"username": username}), 200
 
+# TODO: remove?
+# @app.route('/api/auth', methods=['POST'])
+# def login():
+#     if request.method == 'POST':
+#         ret = request.get_json()
+#         try:
+#             username = ret["username"]
+#             password = ret["password"]
+#         except:
+#             return jsonify({}), 400
 
-@app.route('/api/auth', methods=['POST'])
-def login():
-    if request.method == 'POST':
-        ret = request.get_json()
-        try:
-            username = ret["username"]
-            password = ret["password"]
-        except:
-            return jsonify({}), 400
+#         if password is None or username is None:
+#             return jsonify({}), 400
+#         hashedPas = hashlib.sha256(password.encode())
 
-        if password is None or username is None:
-            return jsonify({}), 400
-        hashedPas = hashlib.sha256(password.encode())
+#         resp = User().find_by_username(username)
 
-        resp = User().find_by_username(username)
+#         if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
+#             return jsonify({"username": username}), 400
 
-        if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
-            return jsonify({"username": username}), 400
-
-        return jsonify({"username": username}), 200
+#         return jsonify({"username": username}), 200
 
 
 @app.route('/api/users', methods=['POST'])
