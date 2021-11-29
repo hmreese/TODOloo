@@ -6,9 +6,6 @@ from dotenv import load_dotenv
 
 
 class Model(dict):
-    """
-    A simple model that wraps mongodb document
-    """
     __getattr__ = dict.get
     __delattr__ = dict.__delitem__
     __setattr__ = dict.__setitem__
@@ -38,17 +35,10 @@ class Model(dict):
 
 
 class User(Model):
-    # to use a .env file, create .env and include a statmement
-    # MONGODB_URI='mongodb+srv://<atlas-user>:<password>@cluster0.6f9re.mongodb.net/<myFirstDatabase>?retryWrites=true&w=majority'
-    # with <atlas-user>, <password> and <myFirstDatabase> updated accordingly
-    # make sure .env is in .gitignore so that your password isn't relased into the wild
-
     load_dotenv()  # take environment variables from .env.
     MONGODB_URI = os.environ['MONGODB_URI']
     db_client = pymongo.MongoClient(MONGODB_URI)
 
-    # db_client = pymongo.MongoClient('localhost', 27017)
-    # change if your db is in another host and port
     # db name is 'users' and collection name is 'users_list'
     collection = db_client["users"]["users_list"]
 
@@ -93,7 +83,7 @@ class User(Model):
 
         return listname
 
-    def update_public(self, username, listname, public):
+    def update_list_public(self, username, listname, public):
         query = {
             "username": username,
             "lists.name": listname
@@ -123,9 +113,24 @@ class User(Model):
 
         return completed
 
-    def add_task(self, username, listname, title, date, description, priority, task_num):
-        # TODO use task_num to edit a task or create update_task func
-        
+    def remove_list(self, username, listname):
+        query = {
+            "username": username,
+        }
+
+        update = {
+            "$pull": {
+                "lists": {
+                    "name": listname
+                }
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        return listname
+
+    def add_task(self, username, listname, title, date, description, priority):
         query = {
             "username": username,
             "lists.name": listname
@@ -146,32 +151,46 @@ class User(Model):
 
         return title
 
-    # def complete_task(self, username, completed)
-    # {
-        
-
-    # }
-
-### HANNAH LOGIC please fix me I am broken
-    def remove_list(self, username, listname):
-        query = {"username": username}
+    def complete_task(self, username, listname, task_num, completed):
+        query = {
+            "username": username,
+            "lists.name": listname,
+        }
         update = {
-            "$push": {
-                "lists": {
-                    "name": listname,
-                    "public": False,
-                    "tasks": []
-                }
+            "$set": {
+                "lists.$.tasks.{0}.completed".format(task_num): completed
             }
         }
-        options = {"upsert": False}
 
-        ret = list(self.collection.update(query, update, options))
+        list(self.collection.update(query, update, False))
 
-        return ret
+        return {"task": task_num, "completed": completed}
+
+    def remove_task(self, username, listname, task_num):
+        query = {
+            "username": username,
+            "lists.name": listname,
+        }
+        update = {
+            "$unset": {
+                "lists.$.tasks.{0}".format(task_num): 1
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        update = {
+            "$pull": {
+                "lists.$.tasks": None
+            }
+        }
+
+        list(self.collection.update(query, update, False))
+
+        return task_num
 
     def add_friend(self, username, friend):
-        
+
         query = {
             "username": username,
         }

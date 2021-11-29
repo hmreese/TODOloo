@@ -11,7 +11,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-# home returns whole user json
 @app.route('/<username>/home')
 def get_home(username):
     user = User().find_by_username(username)
@@ -33,46 +32,36 @@ def get_task(username, listname):
 
     if request.method == 'POST':
         try:
-            task_num = request.get_json()['task_num']
             title = request.get_json()['title']
             date = request.get_json()['date']
             description = request.get_json()['description']
             priority = request.get_json()['priority']
-            completed = request.get_json()['completed']
         except:
             return jsonify({}), 400
-        if task_num is None or title is None or date is None or description is None or priority is None or completed is None:
-            return jsonify({}), 400
 
-        ret = User().add_task(username, listname, title, date, description, priority, task_num)
-        return jsonify({}), 200
+        ret = User().add_task(username, listname, title, date, description, priority)
+        return jsonify({"title": ret}), 200
 
-    ## come back!!!!
     if request.method == 'PATCH':
         try:
             completed = request.get_json()['completed']
+            task_num = request.get_json()['task_num']
         except:
             return jsonify({}), 400
 
-        ret = User().complete_task(username, completed)
-        return jsonify({}), 200
+        ret = User().complete_task(username, listname, task_num, completed)
+        return jsonify(ret), 200
 
-
-    # TODO: not yet functional
     if request.method == 'DELETE':
         try:
             task_num = request.get_json()['task_num']
         except:
             return jsonify({}), 400
-        if task_num is None:
-            return jsonify({}), 400
 
-        #hannah func
-        # ret = User().remove_task(username, listID, taskIndex)
-        return jsonify({}), 200
+        ret = User().remove_task(username, listname, task_num)
+        return jsonify(ret), 200
 
 
-# lists returns user's lists
 @app.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
 def get_lists(username):
     user = User().find_by_username(username)
@@ -92,7 +81,8 @@ def get_lists(username):
             public = False
 
         ret = User().add_list(username, listname, public)
-        return jsonify(ret)
+        return jsonify(ret_list(username, listname)), 200
+
 
     elif request.method == 'PATCH':
         try:
@@ -101,20 +91,19 @@ def get_lists(username):
             return jsonify({}), 400
         try:
             public = request.get_json()['public']
-            ret = User().update_public(username, listname, public)
-            return jsonify(ret)
+            ret = User().update_list_public(username, listname, public)
+            return jsonify(ret)  # TODO: also return list?
         except:
             public = None
         try:
             completed = request.get_json()['completed']
             ret = User().update_list_completed(username, listname, completed)
-            return jsonify(ret)
+            return jsonify(ret)  # TODO: also return list?
         except:
             completed = None
 
-        return jsonify({"No update information provided: public, completed"}), 400 # not sure about 400
+        return jsonify({"No update information provided: public, completed"}), 400
 
-    # TODO: not yet functional
     if request.method == 'DELETE':
         try:
             listname = request.get_json()['listname']
@@ -122,12 +111,11 @@ def get_lists(username):
             return jsonify({}), 400
         if username is None or listname is None:
             return jsonify({}), 400
-        #hannah func
-        # ret = User().remove_list(username, listname)
-        return jsonify({}), 200
+
+        ret = User().remove_list(username, listname)
+        return jsonify(ret), 204
 
 
-# friends returns user's friends
 @app.route('/<username>/friends',  methods=['GET', 'POST'])
 def get_friends(username):
     if request.method == 'GET':
@@ -139,6 +127,7 @@ def get_friends(username):
             fren[0]["password"] = "you are not a TeaPot"
             friendList.append(fren)
         return jsonify(friendList), 200
+
     elif request.method == 'POST':
         try:
             fUsername = request.get_json()['friend_username']
@@ -149,9 +138,9 @@ def get_friends(username):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def hello():
+def helloWorld():
     if request.method == 'GET':
-        return 'Hello, World!'
+        return jsonify('Hello, World!'), 200
 
     if request.method == 'POST':
         ret = request.get_json()
@@ -168,41 +157,22 @@ def hello():
         resp = User().find_by_username(username)
 
         if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
-            return jsonify({"username":username}),400
+            return jsonify({"username": username}), 400
 
         return jsonify({"username": username}), 200
-
-@app.route('/api/auth', methods=['POST'])
-def login():
-    if request.method == 'POST':
-        ret = request.get_json()
-        try:
-            username = ret["username"]
-            password = ret["password"]
-        except:
-            return jsonify({}), 400
-
-        if password is None or username is None:
-            return jsonify({}), 400
-        hashedPas = hashlib.sha256(password.encode())
-
-        resp = User().find_by_username(username)
-
-        if resp == [] or resp[0]['password'] != hashedPas.hexdigest():
-            return jsonify({"username":username}),400
-
-        return jsonify({"username": username}), 200
-
+        
 
 @app.route('/api/users', methods=['POST'])
 def create_user():
     if request.method == 'POST':
         ret = request.get_json()
+        print(ret)
         try:
             username = ret["username"]
             password = ret["password"]
             name = ret["name"]
         except:
+            print("wrong teapot")
             return jsonify({}), 418
 
         if password is None or username is None or len(User().find_by_username(username)) > 0:
@@ -228,3 +198,14 @@ def admin_stats():
             count += len(i["lists"])
         done = jsonify({"number_of_users": numusers, "number_of_lists": count}), 200
         return done
+
+
+def ret_list(username, listname):
+    user = User().find_by_username(username)
+    lists = user[0]["lists"]
+
+    for l in lists:
+        if l['name'] == listname:
+            return l
+
+    return {}
