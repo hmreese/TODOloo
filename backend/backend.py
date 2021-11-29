@@ -92,7 +92,7 @@ def get_lists(username):
         try:
             public = request.get_json()['public']
             ret = User().update_list_public(username, listname, public)
-            return jsonify(ret)  # TODO: also return list?
+            return jsonify(ret)  # TODO: also return list? do it!
         except:
             public = None
         try:
