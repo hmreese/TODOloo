@@ -136,7 +136,7 @@ function MyApp() {
 
   async function makePostCall(person){
     try {
-       const response = await axios.post('http://localhost:5000/users', person);
+       const response = await axios.post('https://todoloo307.herokuapp.com/users', person);
        return response.data;
     }
     catch (error) {
@@ -147,7 +147,7 @@ function MyApp() {
 
   async function fetchAll(){
     try {
-       const response = await axios.get('http://localhost:5000/users');
+       const response = await axios.get('https://todoloo307.herokuapp.com/users');
        return response.data.users_list;
     }
     catch (error){
@@ -160,7 +160,7 @@ function MyApp() {
   async function deleteid(person){
     try {
 
-      const response = await axios.delete('http://localhost:5000/users/'.concat(person._id));
+      const response = await axios.delete('https://todoloo307.herokuapp.com/users/'.concat(person._id));
       return response.data;
     }
     catch (error){

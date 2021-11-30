@@ -47,7 +47,7 @@ const Modal = ({ onRequestClose, type, listName, lists, setLists }) => {
 
     const submitList = async (body) => {
         try {
-            const res = await fetch(`http://localhost:5000/${user.username}/lists`, {
+            const res = await fetch(`https://todoloo307.herokuapp.com/${user.username}/lists`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(body),
@@ -65,7 +65,7 @@ const Modal = ({ onRequestClose, type, listName, lists, setLists }) => {
 
     const submitTask = async (body) => {
         try {
-            const res = await fetch(`http://localhost:5000/${user.username}/lists/${listName}`, {
+            const res = await fetch(`https://todoloo307.herokuapp.com/${user.username}/lists/${listName}`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(body),
