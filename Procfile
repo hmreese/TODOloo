@@ -1,2 +1,2 @@
-web: gunicorn run:backend
+web: flask run
 web: npm start
