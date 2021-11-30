@@ -196,6 +196,7 @@ def admin_stats():
         count = 0
         for i in resp:
             count += len(i["lists"])
+            
         done = jsonify({"number_of_users": numusers, "number_of_lists": count}), 200
         return done
 
