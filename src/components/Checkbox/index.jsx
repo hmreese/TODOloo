@@ -4,10 +4,10 @@ import "./checkbox.scss";
 import confetti from "canvas-confetti";
 import { FaTrashAlt } from "react-icons/fa";
 
-const CheckBox = ({ label, index, confettiLevel }) => {
-  const [checked, setChecked] = useState(false);
+const CheckBox = ({ label, index, confettiLevel, status, lists, setLists }) => {
+  const [checked, setChecked] = useState(status);
 
-  const onClick = useCallback(() => {
+  const completeTask = useCallback(() => {
     confetti({
       particleCount: confettiLevel * 3,
       spread: confettiLevel * 2,
@@ -17,7 +17,40 @@ const CheckBox = ({ label, index, confettiLevel }) => {
       },
     });
     setChecked(true);
+    // try {
+    //     const res = await fetch(`http://localhost:5000/${user.username}/lists/${}`, {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify(body),
+    //     });
+    //     console.log(res)
+    //     if (res.status === 201) {
+    //       const lists = await res.json();
+    //       setLists(lists)
+    //     } 
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
   }, [confettiLevel]);
+
+//   const incompleteTask = async () => {
+//     setChecked(false);
+//     try {
+//         const res = await fetch(`http://localhost:5000/${user.username}/lists`, {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify(body),
+//         });
+//         console.log(res)
+//         if (res.status === 201) {
+//           const lists = await res.json();
+//           setLists(lists)
+//           onRequestClose()
+//         } 
+//       } catch (e) {
+//         console.log(e)
+//       }
+//   }
 
   return (
     <Flex>
@@ -28,12 +61,12 @@ const CheckBox = ({ label, index, confettiLevel }) => {
         type="checkbox"
       />
       <label
-        onClick={!checked ? onClick : () => setChecked(false)}
+        onClick={!checked ? completeTask : () => setChecked(false)}
         className="cbx"
         htmlFor={`cbx-${label}-${index}`}
       ></label>
       <label
-        onClick={!checked ? onClick : () => setChecked(false)}
+        onClick={!checked ? completeTask : () => setChecked(false)}
         className="lbl"
         htmlFor={`cbx-${label}-${index}`}
         data-content={label}

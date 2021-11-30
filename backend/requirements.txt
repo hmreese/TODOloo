@@ -12,7 +12,7 @@ chardet==4.0.0
 click==7.1.2
 configparser==4.0.2
 contextlib2==0.6.0.post1
-cryptography==2.6.1
+cryptography==2.8
 distlib==0.3.3
 Django==1.11.29
 django-utils==0.0.2

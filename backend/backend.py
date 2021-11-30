@@ -6,6 +6,7 @@ import json
 from flask_cors import CORS
 from mongodb import User
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -16,38 +17,6 @@ users = {
 # HIGH = 3
 # MED = 2
 # LOW = 1
-
-# users = {
-#     'users_list': [
-#         {
-#             "name": "Hannah",
-#             "username": "hreese",
-#             "password": "123",
-#             "lists": {
-#                 "School":{
-#                     "tasks": [
-#                         {
-#                             "task_num": 0,
-#                             "title": "DIE",
-#                             "date": "10-22-21",
-#                             "description": "it is important",
-#                             "priority": HIGH,
-#                             "completed": False
-#                         },
-#                         {
-#                             "task_num" : 1,
-#                             "title": "Work",
-#                             "date": "10-23-21",
-#                             "description": "it is important",
-#                             "priority": MED,
-#                             "completed": False
-#                         }
-#                     ]
-#                 }
-#             }
-#         }
-#     ]
-# }
 
 # home returns whole user json
 @app.route('/<username>/home')
@@ -82,7 +51,9 @@ def get_task(username, listname):
             return jsonify({}), 400
 
         ret = User().add_task(username, listname, title, date, description, priority, task_num)
-        return jsonify({}), 200
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 201
 
     # TODO: not yet functional
     if request.method == 'DELETE':
@@ -120,10 +91,12 @@ def get_lists(username):
         for l in lists:
             if l["name"] == listname:
                 ret = User().update_list(username, listname, public)
-                return jsonify(ret)
+                return jsonify(lists)
 
         ret = User().add_list(username, listname, public)
-        return jsonify(ret)
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 201
 
     # TODO: not yet functional
     if request.method == 'DELETE':
@@ -186,10 +159,9 @@ def create_user():
             return jsonify({}), 418
 
         hashedPas = hashlib.sha256(password.encode())
-        print(hashedPas.hexdigest())
         user = {'username': username, 'password': str(hashedPas.hexdigest()), 'name': name, 'lists': [], 'friends': []}
-
         newUser = User(user)
+        print(newUser)
         newUser.save()
         resp = jsonify({"username": username}), 201
 

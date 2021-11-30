@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CheckBox from "../Checkbox";
 import { motion } from "framer-motion";
-import { Flex, Grid, Heading, Text } from "@theme-ui/components";
+import { Flex, Text } from "@theme-ui/components";
 import Modal from "../Modal";
 import { AiOutlineCaretDown, AiFillCaretUp } from "react-icons/ai";
 
@@ -45,7 +45,7 @@ const slideHorizontalAnimation = {
   },
 };
 
-const List = ({ height, list, confettiLevel }) => {
+const List = ({ height, list, confettiLevel, lists, setLists }) => {
   const [isOpen, toggleDropdown] = useState(false);
   const [isModalOpen, setModalIsOpen] = useState(false);
 
@@ -55,7 +55,7 @@ const List = ({ height, list, confettiLevel }) => {
 
   return (
     <div>
-      {isModalOpen && <Modal type="task" onRequestClose={toggleModal} />}
+      {isModalOpen && <Modal type="task" onRequestClose={toggleModal} listName={list.name} lists={lists} setLists={setLists} />}
       <Flex
         sx={{
           justifyContent: "space-between",
@@ -82,7 +82,7 @@ const List = ({ height, list, confettiLevel }) => {
           }}
           onClick={() => toggleDropdown((isOpen) => !isOpen)}
         >
-          {list.title}{" "}
+          {list.name}{" "}
         </Text>
         {!isOpen ? (
           <AiOutlineCaretDown
@@ -110,12 +110,15 @@ const List = ({ height, list, confettiLevel }) => {
         >
           <motion.div className="menu menu-categories">
             <ul className="item-list">
-              {list.items.map((item, index) => (
+              {list.tasks.map((item, index) => (
                 <li key={index} className="item">
                   <CheckBox
                     confettiLevel={confettiLevel}
-                    label={item}
+                    label={item.title}
                     index={index}
+                    status={item.completed}
+                    lists={lists}
+                    setLists={setLists}
                   />
                 </li>
               ))}

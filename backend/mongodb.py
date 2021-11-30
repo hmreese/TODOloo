@@ -3,7 +3,8 @@ from bson import ObjectId
 import dns
 import os
 from dotenv import load_dotenv
-
+import certifi
+ca = certifi.where()
 
 class Model(dict):
     """
@@ -45,7 +46,7 @@ class User(Model):
 
     load_dotenv()  # take environment variables from .env.
     MONGODB_URI = os.environ['MONGODB_URI']
-    db_client = pymongo.MongoClient(MONGODB_URI)
+    db_client = pymongo.MongoClient(MONGODB_URI, tlsCAFile=ca)
 
     # db_client = pymongo.MongoClient('localhost', 27017)
     # change if your db is in another host and port
