@@ -1,88 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Lists.scss";
 import List from "../../components/List";
 import Modal from "../../components/Modal";
 import { Box, Flex, Slider, Text } from "@theme-ui/components";
+import { useLists } from "../../utils/hooks";
 
 const Lists = () => {
   const [user] = useState(JSON.parse(localStorage.getItem("user")));
   const [isModalOpen, setModalIsOpen] = useState(false);
   const [confettiLevel, setConfettiLevel] = useState(25);
+  const [lists, setLists] = useState([]);
+
+  const getLists = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/${user.username}/lists`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      console.log(res)
+      if (res.status === 200) {
+        const lists = await res.json();
+        console.log(lists)
+        return setLists(lists);
+      } 
+    } catch (e) {
+      console.log(e)
+      return 
+    }
+  }
+
+  useEffect(() => {
+    getLists()
+  }, [])
 
   const toggleModal = () => {
     setModalIsOpen(!isModalOpen);
   };
 
-  const lists = [
-    {
-      title: "Test Title",
-      items: [
-        "test test test test",
-        "test test test test",
-        "test test test test",
-        "test test test test",
-        "test test test test",
-      ],
-    },
-    {
-      title: "Another Title",
-      items: ["TESTTTTTE TESTS", "TESTTTTTE TESTS", "TESTTTTTE TESTS"],
-    },
-    {
-      title: "Star Wars Quotes",
-      items: [
-        "Do. Or do not. There is no try.",
-        "The ability to speak does not make you intelligent.",
-        "This is the way.",
-      ],
-    },
-    // {
-    //   title: 'test title 2',
-    //     items: [
-    //       'test2 test test test test',
-    //       'test2 test test test test',
-    //       'test2 test test test test',
-    //       'test2 test test test test',
-    //       'test2 test test test test',
-    //     ]
-    //   },
-    //   {
-    //       title: ' another title 2',
-    //       items: [
-    //           'TESTTTTTE TESTS',
-    //           'TESTTTTTE TESTS',
-    //           'TESTTTTTE TESTS',
-    //         ]
-    //       },
-    // {
-    //   title: 'test title 3',
-    //     items: [
-    //       'test test test test',
-    //       'test test test test',
-    //       'test test test test',
-    //       'test test test test',
-    //       'test test test test',
-    //     ]
-    //   },
-    //   {
-    //       title: ' another title 3',
-    //       items: [
-    //           'TESTTTTTE TESTS',
-    //           'TESTTTTTE TESTS',
-    //           'TESTTTTTE TESTS',
-    //         ]
-    //       },
-    // {
-    //   title: 'title',
-    //   items: [
-    //     'test test test test'
-    //   ]
-    // },
-  ];
-
   return (
     <div style={{ height: "110vh" }} className="container">
-      {isModalOpen && <Modal type="list" onRequestClose={toggleModal} />}
+      {isModalOpen && <Modal type="list" onRequestClose={toggleModal} lists={lists} setLists={setLists}/>}
       <Flex
         sx={{
           alignItems: "center",
@@ -110,12 +67,15 @@ const Lists = () => {
         }}
         className="wrapper"
       >
-        {lists.map((list, i) => (
+        {console.log(lists)}
+        {lists?.map((list, i) => (
           <List
-            key={list.title + i}
+            user={user}
+            key={list.name + i}
             height={(list.length + 1) * 30}
             list={list}
-            confettiLevel={confettiLevel}
+            confettiLevel={confettiLevel > 95 ? 200 : confettiLevel}
+            lists={lists} setLists={setLists}
           />
         ))}
       </Flex>

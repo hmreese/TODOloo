@@ -188,7 +188,7 @@ def test_delete_task():
     resp = requests.delete('https://todoloo307.herokuapp.com/testMcTesterson/lists/test_list', json=task)
     if (resp):
         r = resp.json()
-        assert ((r['task_deleted'] == 0) and (resp.status_code == 204))
+        assert ((r['task_deleted'] == 0) and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
@@ -200,7 +200,7 @@ def test_delete_list():
     resp = requests.delete('https://todoloo307.herokuapp.com/testMcTesterson/lists', json=lst)
     if (resp):
         r = resp.json()
-        assert ((r['name'] == "test_list") and (resp.status_code == 204))
+        assert ((r['name'] == "test_list") and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 

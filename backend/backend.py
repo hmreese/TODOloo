@@ -10,7 +10,6 @@ from mongodb import User
 app = Flask(__name__)
 CORS(app)
 
-
 @app.route('/<username>/home')
 def get_home(username):
     user = User().find_by_username(username)
@@ -46,7 +45,11 @@ def get_task(username, listname):
             return jsonify({}), 400
 
         ret = User().add_task(username, listname, title, date, description, priority)
-        return jsonify(ret_task(username, listname, -1)), 200
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 201
+        # ret = User().add_task(username, listname, title, date, description, priority)
+        # return jsonify(ret_task(username, listname, -1)), 201
 
     if request.method == 'PATCH':
         try:
@@ -56,7 +59,10 @@ def get_task(username, listname):
             return jsonify({}), 400
 
         ret = User().complete_task(username, listname, task_num, completed)
-        return jsonify(ret_task(username, listname, task_num)), 200
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 201
+        # return jsonify(ret_task(username, listname, task_num)), 201
 
     if request.method == 'DELETE':
         try:
@@ -65,7 +71,10 @@ def get_task(username, listname):
             return jsonify({}), 400
 
         ret = User().remove_task(username, listname, task_num)
-        return jsonify({"task_deleted": task_num}), 200
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 200
+        # return jsonify({"task_deleted": task_num}), 200
 
 
 @app.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
@@ -89,8 +98,17 @@ def get_lists(username):
         except:
             public = False
 
+        for l in lists:
+            if l["name"] == listname:
+                ret = User().update_list(username, listname, public)
+                return jsonify(lists)
+
         ret = User().add_list(username, listname, public)
-        return jsonify(ret_list(username, listname)), 200
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 201
+        # ret = User().add_list(username, listname, public)
+        # return jsonify(ret_list(username, listname)), 201
 
     elif request.method == 'PATCH':
         try:
@@ -121,7 +139,10 @@ def get_lists(username):
             return jsonify({}), 400
 
         ret = User().remove_list(username, listname)
-        return jsonify({'name': ret}), 200
+        user = User().find_by_username(username)
+        lists = user[0]["lists"]
+        return jsonify(lists), 200
+        # return jsonify({'name': ret}), 200
 
 
 @app.route('/<username>/friends',  methods=['GET', 'POST'])
@@ -191,8 +212,8 @@ def create_user():
 
         hashedPas = hashlib.sha256(password.encode())
         user = {'username': username, 'password': str(hashedPas.hexdigest()), 'name': name, 'lists': [], 'friends': []}
-
         newUser = User(user)
+        print(newUser)
         newUser.save()
         resp = jsonify({"username": username}), 201
 

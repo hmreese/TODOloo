@@ -3,7 +3,8 @@ from bson import ObjectId
 import dns
 import os
 from dotenv import load_dotenv
-
+import certifi
+ca = certifi.where()
 
 class Model(dict):
     __getattr__ = dict.get
@@ -37,7 +38,7 @@ class Model(dict):
 class User(Model):
     load_dotenv()  # take environment variables from .env.
     MONGODB_URI = os.environ['MONGODB_URI']
-    db_client = pymongo.MongoClient(MONGODB_URI)
+    db_client = pymongo.MongoClient(MONGODB_URI, tlsCAFile=ca)
 
     # db name is 'users' and collection name is 'users_list'
     collection = db_client["users"]["users_list"]

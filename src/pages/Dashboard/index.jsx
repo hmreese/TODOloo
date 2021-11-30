@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 const Dashboard = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [user] = useState(JSON.parse(localStorage.getItem("user")));
 
     return (
     <div className="container">

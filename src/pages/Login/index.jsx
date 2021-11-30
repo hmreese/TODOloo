@@ -46,17 +46,21 @@ const Login = ({user, setUser}) => {
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+    
     const body = {
       name,
       username,
       password,
     };
+    // localStorage.setItem('user', JSON.stringify(body))
+    console.log(body)
     try {
       const res = await fetch('http://localhost:5000/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
+      console.log(res)
       if (res.status === 201) {
         const userObj = await res.json();
         await localStorage.setItem('user', JSON.stringify(userObj))
@@ -76,7 +80,7 @@ const Login = ({user, setUser}) => {
       password,
     };
     try {
-      const res = await fetch('http://localhost:5000/api/auth', {
+      const res = await fetch('http://localhost:5000/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
