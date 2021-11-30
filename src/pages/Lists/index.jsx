@@ -70,10 +70,11 @@ const Lists = () => {
         {console.log(lists)}
         {lists?.map((list, i) => (
           <List
+            user={user}
             key={list.name + i}
             height={(list.length + 1) * 30}
             list={list}
-            confettiLevel={confettiLevel}
+            confettiLevel={confettiLevel > 95 ? 200 : confettiLevel}
             lists={lists} setLists={setLists}
           />
         ))}

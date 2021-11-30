@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import CheckBox from "../Checkbox";
 import { motion } from "framer-motion";
-import { Flex, Text } from "@theme-ui/components";
+import { Box, Flex, Text } from "@theme-ui/components";
 import Modal from "../Modal";
 import { AiOutlineCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { FaTrashAlt } from "react-icons/fa";
 
 const slideVerticalAnimation = {
   open: {
@@ -45,16 +46,34 @@ const slideHorizontalAnimation = {
   },
 };
 
-const List = ({ height, list, confettiLevel, lists, setLists }) => {
+const List = ({ height, list, confettiLevel, lists, setLists, user }) => {
   const [isOpen, toggleDropdown] = useState(false);
   const [isModalOpen, setModalIsOpen] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
   const toggleModal = () => {
     setModalIsOpen(!isModalOpen);
   };
 
+  const deleteList = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/${user.username}/lists`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({listname: list.name}),
+      });
+      console.log(res)
+      if (res.status === 200) {
+        const lists = await res.json();
+        setLists(lists)
+      } 
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
-    <div>
+    <div onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
       {isModalOpen && <Modal type="task" onRequestClose={toggleModal} listName={list.name} lists={lists} setLists={setLists} />}
       <Flex
         sx={{
@@ -84,17 +103,22 @@ const List = ({ height, list, confettiLevel, lists, setLists }) => {
         >
           {list.name}{" "}
         </Text>
-        {!isOpen ? (
-          <AiOutlineCaretDown
-            className="icon"
-            onClick={() => toggleDropdown((isOpen) => !isOpen)}
-          />
-        ) : (
-          <AiFillCaretUp
-            className="icon"
-            onClick={() => toggleDropdown((isOpen) => !isOpen)}
-          />
-        )}
+        <Flex>
+          {!isOpen ? (
+            <AiOutlineCaretDown
+              className="icon"
+              onClick={() => toggleDropdown((isOpen) => !isOpen)}
+            />
+          ) : (
+            <AiFillCaretUp
+              className="icon"
+              onClick={() => toggleDropdown((isOpen) => !isOpen)}
+            />
+          )}
+          <Box sx={{marginLeft: '20px', marginRight: '-10px'}}>
+            {isHovering && <FaTrashAlt onClick={deleteList} className="trash" />}
+          </Box>
+        </Flex>
       </Flex>
       <motion.div
         className="dropdown-container"
@@ -113,6 +137,9 @@ const List = ({ height, list, confettiLevel, lists, setLists }) => {
               {list.tasks.map((item, index) => (
                 <li key={index} className="item">
                   <CheckBox
+                    user={user}
+                    taskNum={index}
+                    listName={list.name}
                     confettiLevel={confettiLevel}
                     label={item.title}
                     index={index}
