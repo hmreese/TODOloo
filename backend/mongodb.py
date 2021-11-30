@@ -64,6 +64,10 @@ class User(Model):
         users = list(self.collection.find({"username": username}))
         for user in users:
             user["_id"] = str(user["_id"])
+
+        if len(users) == 0:
+            return None
+
         return users
 
     def add_list(self, username, listname, public):

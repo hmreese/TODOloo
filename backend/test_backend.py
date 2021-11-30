@@ -240,6 +240,4 @@ def test_ret_task():
 
 ## TEARDOWN ##
 
-# @pytest.fixture(scope="session", autouse=True)
-# def cleanup():
-# remove testMcTesterson
+# "testMcTesterson" must be deleted from database at end of tests
