@@ -112,7 +112,7 @@ def get_lists(username):
             return jsonify({}), 400
 
         ret = User().remove_list(username, listname)
-        return jsonify(ret), 204
+        return jsonify({'name': ret}), 204
 
 
 @app.route('/<username>/friends',  methods=['GET', 'POST'])
@@ -174,7 +174,6 @@ def create_user():
             print("wrong teapot")
             return jsonify({}), 418
 
-        # TODO: @michael should we add an error message for "that username already exists"
         if password is None or username is None or len(User().find_by_username(username)) > 0:
             return jsonify({}), 418
 
@@ -196,7 +195,7 @@ def admin_stats():
         count = 0
         for i in resp:
             count += len(i["lists"])
-            
+
         done = jsonify({"number_of_users": numusers, "number_of_lists": count}), 200
         return done
 
