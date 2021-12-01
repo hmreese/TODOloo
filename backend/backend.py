@@ -184,7 +184,8 @@ def helloWorld():
         except:
             return jsonify({}), 400
 
-        if password is None or username is None:
+        print(len(password),len(username))
+        if len(password) == 0 or username is None:
             return jsonify({}), 400
         hashedPas = hashlib.sha256(password.encode())
 
@@ -194,28 +195,25 @@ def helloWorld():
             return jsonify({"username": username}), 400
 
         return jsonify({"username": username}), 200
-        
+
 
 @backend.route('/api/users', methods=['POST'])
 def create_user():
     if request.method == 'POST':
         ret = request.get_json()
-        print(ret)
         try:
             username = ret["username"]
             password = ret["password"]
             name = ret["name"]
         except:
-            print("wrong teapot")
             return jsonify({}), 418
 
-        if password is None or username is None or User().find_by_username(username) is not None:
+        if len(password) == 0 or len(username) == 0 or User().find_by_username(username) is not None:
             return jsonify({}), 418
 
         hashedPas = hashlib.sha256(password.encode())
         user = {'username': username, 'password': str(hashedPas.hexdigest()), 'name': name, 'lists': [], 'friends': []}
         newUser = User(user)
-        print(newUser)
         newUser.save()
         resp = jsonify({"username": username}), 201
 
