@@ -46,7 +46,7 @@ const slideHorizontalAnimation = {
   },
 };
 
-const List = ({ height, list, confettiLevel, lists, setLists, user }) => {
+const List = ({ height, list, confettiLevel, lists, setLists, user, friend }) => {
   const [isOpen, toggleDropdown] = useState(false);
   const [isModalOpen, setModalIsOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -57,7 +57,7 @@ const List = ({ height, list, confettiLevel, lists, setLists, user }) => {
 
   const deleteList = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/${user.username}/lists`, {
+      const res = await fetch(`https://todoloo307server.herokuapp.com/${user.username}/lists`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({listname: list.name}),
@@ -90,7 +90,7 @@ const List = ({ height, list, confettiLevel, lists, setLists, user }) => {
           "&:hover": { transform: "scale(1.02)" },
         }}
       >
-        <button onClick={toggleModal}>+</button>
+        {!friend && <button onClick={toggleModal}>+</button>}
         <Text
           sx={{
             marginRight: "auto",
@@ -115,9 +115,9 @@ const List = ({ height, list, confettiLevel, lists, setLists, user }) => {
               onClick={() => toggleDropdown((isOpen) => !isOpen)}
             />
           )}
-          <Box sx={{marginLeft: '20px', marginRight: '-10px'}}>
+          {!friend && <Box sx={{marginLeft: '20px', marginRight: '-10px'}}>
             {isHovering && <FaTrashAlt onClick={deleteList} className="trash" />}
-          </Box>
+          </Box>}
         </Flex>
       </Flex>
       <motion.div
@@ -137,6 +137,7 @@ const List = ({ height, list, confettiLevel, lists, setLists, user }) => {
               {list.tasks.map((item, index) => (
                 <li key={index} className="item">
                   <CheckBox
+                    friend={friend || null}
                     user={user}
                     taskNum={index}
                     listName={list.name}

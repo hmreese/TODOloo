@@ -13,7 +13,7 @@ const Lists = () => {
 
   const getLists = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/${user.username}/lists`, {
+      const res = await fetch(`https://todoloo307server.herokuapp.com/${user.username}/lists`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });

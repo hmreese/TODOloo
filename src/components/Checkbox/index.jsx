@@ -4,11 +4,10 @@ import "./checkbox.scss";
 import confetti from "canvas-confetti";
 import { FaTrashAlt } from "react-icons/fa";
 
-const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listName, user, taskNum }) => {
+const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listName, user, taskNum, friend }) => {
   const [checked, setChecked] = useState(status);
 
   const completeTask = useCallback( async () => {
-    console.log(confettiLevel)
     confetti({
       particleCount: confettiLevel * 6,
       spread: confettiLevel * 4,
@@ -19,7 +18,7 @@ const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listNa
     });
     setChecked(true);
     try {
-        const res = await fetch(`https://todoloo307server.herokuapp.com//${user.username}/lists/${listName}`, {
+        const res = await fetch(`https://todoloo307server.herokuapp.com/${user.username}/lists/${listName}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({task_num: taskNum, completed: true}),
@@ -37,7 +36,7 @@ const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listNa
   const incompleteTask = async () => {
     setChecked(false);
     try {
-      const res = await fetch(`https://todoloo307server.herokuapp.com//${user.username}/lists/${listName}`, {
+      const res = await fetch(`https://todoloo307server.herokuapp.com/${user.username}/lists/${listName}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({task_num: taskNum, completed: false}),
@@ -54,7 +53,7 @@ const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listNa
 
   const deleteTask = async () => {
     try {
-      const res = await fetch(`https://todoloo307server.herokuapp.com//${user.username}/lists/${listName}`, {
+      const res = await fetch(`https://todoloo307server.herokuapp.com/${user.username}/lists/${listName}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({task_num: taskNum}),
@@ -77,21 +76,22 @@ const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listNa
         className="hidden"
         type="checkbox"
         defaultChecked={checked}
+        disabled={friend}
       />
       <label
-        onClick={!checked ? completeTask : incompleteTask}
+        onClick={!friend ? !checked ? completeTask : incompleteTask : null}
         className="cbx"
         htmlFor={`cbx-${label}-${index}`}
       ></label>
       <label
-        onClick={!checked ? completeTask : incompleteTask}
+        onClick={!friend ? !checked ? completeTask : incompleteTask : null}
         className="lbl"
         htmlFor={`cbx-${label}-${index}`}
         data-content={label}
       >
         {label}
       </label>
-      <FaTrashAlt onClick={deleteTask} className="trash" />
+      {!friend && <FaTrashAlt onClick={deleteTask} className="trash" />}
     </Flex>
   );
 };

@@ -2,7 +2,7 @@ import { Flex } from '@theme-ui/components';
 import React, { useEffect, useState } from 'react'
 import './modal.scss'
 
-const Modal = ({ onRequestClose, type, listName, lists, setLists }) => {
+const Modal = ({ onRequestClose, type, listName, lists, setLists, setFriends }) => {
     const [user] = useState(JSON.parse(localStorage.getItem("user")));
 	// Use useEffect to add an event listener to the document
 	useEffect(() => {
@@ -31,6 +31,13 @@ const Modal = ({ onRequestClose, type, listName, lists, setLists }) => {
         label3: ''
     }
 
+    const friendOptions = {
+        title: 'Add Friend',
+        label1: 'Friend Username',
+        label2: '',
+        label3: ''
+    }
+
     const taskOptions = {
         title: 'New Task',
         label1: 'Task Title',
@@ -44,6 +51,7 @@ const Modal = ({ onRequestClose, type, listName, lists, setLists }) => {
 
     let options = listOptions;
     if (type === 'task') options = taskOptions;
+    if (type === 'friend') options = friendOptions;
 
     const submitList = async (body) => {
         try {
@@ -81,7 +89,27 @@ const Modal = ({ onRequestClose, type, listName, lists, setLists }) => {
           }
     }
 
+    const addFriend = async (body) => {
+        try {
+            const res = await fetch(`https://todoloo307server.herokuapp.com/${user.username}/friends`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body),
+            });
+            console.log(res)
+            if (res.status === 200) {
+              const lists = await res.json();
+              console.log(lists)
+              setFriends(lists)
+              onRequestClose()
+            } 
+          } catch (e) {
+            console.log(e)
+          }
+    }
+
     const onSubmit = () => {
+        if (type === "friend") return addFriend({friend_username: option1})
         let body = {
             listname: option1
         }

@@ -39,12 +39,11 @@ const Routes = () => {
         <NavBar user={user} setUser={setUser} />
         <div className="contentWrap">
           <Switch>
-            <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute path="/friends" component={Friends} />
             <PrivateRoute path="/lists" component={Lists} />
             <Route exact path="/login">
               {user ? (
-                <Redirect to="/dashboard" />
+                <Redirect to="/lists" />
               ) : (
                 <LoginForm user={user} setUser={setUser} />
               )}
