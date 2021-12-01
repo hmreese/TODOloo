@@ -41,7 +41,7 @@ def test_get_friends():
     resp = requests.get('https://todoloo307server.herokuapp.com/{0}/friends'.format('hreese'))
     if (resp):
         r = resp.json()
-        assert (r[0][0]['username'] == 'bob24')
+        assert (r[0]['username'] == 'bob24')
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
@@ -131,7 +131,7 @@ def test_add_friend():
     resp = requests.post('https://todoloo307server.herokuapp.com/testMcTesterson/friends', json=friend)
     if (resp):
         r = resp.json()
-        assert ((r['friend'] == 'hreese') and (resp.status_code == 200))
+        assert ((r[-1]['username'] == 'hreese') and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
