@@ -17,3 +17,5 @@ jobs:
         working-directory: ./backend
       - run: pytest test_backend.py
         working-directory: ./backend
+        env:
+          MONGODB_URI: secrets.MONGODB_URI
