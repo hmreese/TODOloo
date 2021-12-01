@@ -224,7 +224,6 @@ def test_ret_list():
     }
 
     ret = ret_list(username, listname)
-
     assert(ret['name'] == expected['name'])
 
 
