@@ -147,7 +147,7 @@ def test_update_list():
     resp = requests.patch('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=update)
     if (resp):
         r = resp.json()
-        assert ((r['public'] == True) and (resp.status_code == 200))
+        assert ((r[0]['public'] == True) and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
@@ -174,7 +174,7 @@ def test_complete_list():
     resp = requests.patch('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=update)
     if (resp):
         r = resp.json()
-        assert ((r['completed'] == True) and (resp.status_code == 200))
+        assert ((r[0]['completed'] == True) and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
