@@ -112,13 +112,17 @@ def get_lists(username):
         try:
             public = request.get_json()['public']
             ret = User().update_list_public(username, listname, public)
-            return jsonify(ret_list(username, listname)), 200
+            user = User().find_by_username(username)
+            lists = user[0]["lists"]
+            return jsonify(ret_list(lists, listname)), 200
         except:
             public = None
         try:
             completed = request.get_json()['completed']
             ret = User().update_list_completed(username, listname, completed)
-            return jsonify(ret_list(username, listname)), 200
+            user = User().find_by_username(username)
+            lists = user[0]["lists"]
+            return jsonify(ret_list(lists, listname)), 200
         except:
             completed = None
 
@@ -226,25 +230,13 @@ def admin_stats():
         return done
 
 
-def ret_list(username, listname):
-    user = User().find_by_username(username)
-    lists = user[0]["lists"]
-
+def ret_list(lists, listname):
     for l in lists:
         if l['name'] == listname:
             return l
 
     return {}
 
-def ret_task(username, listname, task_num):
-    user = User().find_by_username(username)
-    lists = user[0]["lists"]
-
-    for l in lists:
-        if l['name'] == listname:
-            return l['tasks'][task_num]
-
-    return {}
 
 if __name__ == "__main__":
   backend.run()

@@ -226,22 +226,6 @@ def test_ret_list():
     assert(ret['name'] == expected['name'])
 
 
-def test_ret_task():
-    username = 'hreese'
-    listname = 'School'
-
-    expected = {
-        "completed": True,
-        "date": "10-22-2021",
-        "description": "Problems 1-30",
-        "priority": 3,
-        "title": "Math Homework"
-    }
-
-    ret = ret_task(username, listname, 0)
-
-    assert(ret['title'] == expected['title'])
-
 ## TEARDOWN ##
 
 # "testMcTesterson" must be deleted from database at end of tests
