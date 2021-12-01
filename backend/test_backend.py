@@ -1,4 +1,4 @@
-from backend import ret_list, ret_task
+from backend import ret_list
 import pytest
 from flask.globals import request
 
