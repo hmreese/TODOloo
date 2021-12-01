@@ -1,3 +1,16 @@
+## Project Description
+For college students who are disorganized, the “TODOloo” is a to-do list application that makes organizing and completing daily tasks fun. Unlike traditional to-do lists or notes apps, our product produces the maximum amount of dopamine possible for completing tasks.
+
+## UI Prototype
+https://www.figma.com/file/74NjrMQzElmnqmF5CAaNzJ/TODOloo-app?node-id=6%3A2
+Last Updated: 10/20/21
+
+## Development Environment Setup
+FIX ME
+
+## Continuous Integration
+https://github.com/hmreese/TODOloo/actions
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -35,7 +35,7 @@ def get_task(username, listname):
 
         return jsonify({}), 400
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
         try:
             title = request.get_json()['title']
             date = request.get_json()['date']
@@ -48,10 +48,8 @@ def get_task(username, listname):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 201
-        # ret = User().add_task(username, listname, title, date, description, priority)
-        # return jsonify(ret_task(username, listname, -1)), 201
 
-    if request.method == 'PATCH':
+    elif request.method == 'PATCH':
         try:
             completed = request.get_json()['completed']
             task_num = request.get_json()['task_num']
@@ -62,9 +60,8 @@ def get_task(username, listname):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 201
-        # return jsonify(ret_task(username, listname, task_num)), 201
 
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         try:
             task_num = request.get_json()['task_num']
         except:
@@ -74,7 +71,6 @@ def get_task(username, listname):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 200
-        # return jsonify({"task_deleted": task_num}), 200
 
 
 @backend.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
@@ -107,8 +103,6 @@ def get_lists(username):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 201
-        # ret = User().add_list(username, listname, public)
-        # return jsonify(ret_list(username, listname)), 201
 
     elif request.method == 'PATCH':
         try:
@@ -118,13 +112,17 @@ def get_lists(username):
         try:
             public = request.get_json()['public']
             ret = User().update_list_public(username, listname, public)
-            return jsonify(ret_list(username, listname)), 200
+            user = User().find_by_username(username)
+            lists = user[0]["lists"]
+            return jsonify(lists), 200
         except:
             public = None
         try:
             completed = request.get_json()['completed']
             ret = User().update_list_completed(username, listname, completed)
-            return jsonify(ret_list(username, listname)), 200
+            user = User().find_by_username(username)
+            lists = user[0]["lists"]
+            return jsonify(lists), 200
         except:
             completed = None
 
@@ -142,7 +140,6 @@ def get_lists(username):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 200
-        # return jsonify({'name': ret}), 200
 
 
 @backend.route('/<username>/friends',  methods=['GET', 'POST'])
@@ -237,26 +234,6 @@ def admin_stats():
         done = jsonify({"number_of_users": numusers, "number_of_lists": count}), 200
         return done
 
-
-def ret_list(username, listname):
-    user = User().find_by_username(username)
-    lists = user[0]["lists"]
-
-    for l in lists:
-        if l['name'] == listname:
-            return l
-
-    return {}
-
-def ret_task(username, listname, task_num):
-    user = User().find_by_username(username)
-    lists = user[0]["lists"]
-
-    for l in lists:
-        if l['name'] == listname:
-            return l['tasks'][task_num]
-
-    return {}
 
 if __name__ == "__main__":
   backend.run()

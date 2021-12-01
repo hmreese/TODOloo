@@ -1,4 +1,3 @@
-from backend import ret_list, ret_task
 import pytest
 from flask.globals import request
 
@@ -56,14 +55,13 @@ def test_get_task():
         pytest.fail("Request failed: ", resp.status_code)
 
 
-# TODO: michael todo
-# def test_get_admin_stats():
-#     resp = requests.get('https://todoloo307server.herokuapp.com/admin')
-#     if (resp):
-#         r = resp.json()
-#         # assert something
-#     else:
-#         pytest.fail("Request failed")    
+def test_get_admin_stats():
+    resp = requests.get('https://todoloo307server.herokuapp.com/admin')
+    if (resp):
+        r = resp.json()
+        assert (len(r) != 0)
+    else:
+        pytest.fail("Request failed")       
 
 ## POST TESTS ##
 
@@ -149,7 +147,7 @@ def test_update_list():
     resp = requests.patch('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=update)
     if (resp):
         r = resp.json()
-        assert ((r['public'] == True) and (resp.status_code == 200))
+        assert ((r[0]['public'] == True) and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
@@ -176,7 +174,7 @@ def test_complete_list():
     resp = requests.patch('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=update)
     if (resp):
         r = resp.json()
-        assert ((r['completed'] == True) and (resp.status_code == 200))
+        assert ((r[0]['completed'] == True) and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
@@ -210,38 +208,6 @@ def test_delete_list():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
-## HELPER TESTS ##
-
-def test_ret_list():
-    username = 'hreese'
-    listname = 'tester'
-
-    expected = {
-        "completed": False,
-        "name": "tester",
-        "public": False,
-        "tasks": []
-    }
-
-    ret = ret_list(username, listname)
-    assert(ret['name'] == expected['name'])
-
-
-def test_ret_task():
-    username = 'hreese'
-    listname = 'School'
-
-    expected = {
-        "completed": True,
-        "date": "10-22-2021",
-        "description": "Problems 1-30",
-        "priority": 3,
-        "title": "Math Homework"
-    }
-
-    ret = ret_task(username, listname, 0)
-
-    assert(ret == expected)
 
 ## TEARDOWN ##
 
