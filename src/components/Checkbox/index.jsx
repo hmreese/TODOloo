@@ -19,7 +19,7 @@ const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listNa
     });
     setChecked(true);
     try {
-        const res = await fetch(`https://todoloo307.herokuapp.com/${user.username}/lists/${listName}`, {
+        const res = await fetch(`https://todoloo307server.herokuapp.com//${user.username}/lists/${listName}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({task_num: taskNum, completed: true}),
@@ -37,7 +37,7 @@ const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listNa
   const incompleteTask = async () => {
     setChecked(false);
     try {
-      const res = await fetch(`https://todoloo307.herokuapp.com/${user.username}/lists/${listName}`, {
+      const res = await fetch(`https://todoloo307server.herokuapp.com//${user.username}/lists/${listName}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({task_num: taskNum, completed: false}),
@@ -54,7 +54,7 @@ const CheckBox = ({ label, index, confettiLevel, status, lists, setLists, listNa
 
   const deleteTask = async () => {
     try {
-      const res = await fetch(`https://todoloo307.herokuapp.com/${user.username}/lists/${listName}`, {
+      const res = await fetch(`https://todoloo307server.herokuapp.com//${user.username}/lists/${listName}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({task_num: taskNum}),

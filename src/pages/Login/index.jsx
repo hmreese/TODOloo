@@ -55,7 +55,7 @@ const Login = ({user, setUser}) => {
     // localStorage.setItem('user', JSON.stringify(body))
     console.log(body)
     try {
-      const res = await fetch('https://todoloo307.herokuapp.com/api/users', {
+      const res = await fetch('https://todoloo307server.herokuapp.com//api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -80,7 +80,7 @@ const Login = ({user, setUser}) => {
       password,
     };
     try {
-      const res = await fetch('https://todoloo307.herokuapp.com/', {
+      const res = await fetch('https://todoloo307server.herokuapp.com//', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
