@@ -195,7 +195,7 @@ def test_add_list_public():
     resp = requests.post('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=new_list)
     if (resp):
         r = resp.json()
-        assert ((r[-1]['name'] == 'test_list'))
+        assert ((r[-1]['name'] == 'temp'))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
@@ -308,7 +308,7 @@ def test_delete_list():
     resp = requests.delete('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=lst)
     if (resp):
         r = resp.json()
-        assert ((r == []) and (resp.status_code == 200))
+        assert ((r[0]["name"] == "temp") and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
