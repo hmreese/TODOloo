@@ -241,7 +241,7 @@ def test_ret_task():
 
     ret = ret_task(username, listname, 0)
 
-    assert(ret == expected)
+    assert(ret['title'] == expected['title'])
 
 ## TEARDOWN ##
 
