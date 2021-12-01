@@ -35,7 +35,7 @@ def get_task(username, listname):
 
         return jsonify({}), 400
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
         try:
             title = request.get_json()['title']
             date = request.get_json()['date']
@@ -48,10 +48,8 @@ def get_task(username, listname):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 201
-        # ret = User().add_task(username, listname, title, date, description, priority)
-        # return jsonify(ret_task(username, listname, -1)), 201
 
-    if request.method == 'PATCH':
+    elif request.method == 'PATCH':
         try:
             completed = request.get_json()['completed']
             task_num = request.get_json()['task_num']
@@ -62,9 +60,8 @@ def get_task(username, listname):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 201
-        # return jsonify(ret_task(username, listname, task_num)), 201
 
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         try:
             task_num = request.get_json()['task_num']
         except:
@@ -74,7 +71,6 @@ def get_task(username, listname):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 200
-        # return jsonify({"task_deleted": task_num}), 200
 
 
 @backend.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
@@ -107,8 +103,6 @@ def get_lists(username):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 201
-        # ret = User().add_list(username, listname, public)
-        # return jsonify(ret_list(username, listname)), 201
 
     elif request.method == 'PATCH':
         try:
@@ -142,7 +136,6 @@ def get_lists(username):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 200
-        # return jsonify({'name': ret}), 200
 
 
 @backend.route('/<username>/friends',  methods=['GET', 'POST'])
