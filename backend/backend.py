@@ -7,20 +7,26 @@ from flask_cors import CORS
 from mongodb import User
 
 
-app = Flask(__name__, static_folder='build',static_url_path='')
-CORS(app)
+backend = Flask(__name__)
+CORS(backend)
 
-@app.route('/<username>/home')
+@backend.route('/<username>/home')
 def get_home(username):
     user = User().find_by_username(username)
+    if user is None:
+        return jsonify("User does not exist"), 400
+
     user[0]["password"] = "nope"
     return jsonify(user), 200
 
 
-@app.route('/<username>/lists/<listname>', methods=['GET', 'POST', 'DELETE', 'PATCH'])
+@backend.route('/<username>/lists/<listname>', methods=['GET', 'POST', 'DELETE', 'PATCH'])
 def get_task(username, listname):
     if request.method == 'GET':
         user = User().find_by_username(username)
+        if user is None:
+            return jsonify("User does not exist"), 400
+
         lists = user[0]["lists"]
 
         for l in lists:
@@ -52,10 +58,6 @@ def get_task(username, listname):
         except:
             return jsonify({}), 400
 
-        # ret = User().add_task(username, listname, title, date, description, priority, task_num)
-        # user = User().find_by_username(username)
-        # lists = user[0]["lists"]
-        # return jsonify(lists), 201
         ret = User().complete_task(username, listname, task_num, completed)
         user = User().find_by_username(username)
         lists = user[0]["lists"]
@@ -72,12 +74,15 @@ def get_task(username, listname):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 200
-        # return jsonify({"task_deleted": task_num}), 204
+        # return jsonify({"task_deleted": task_num}), 200
 
 
-@app.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
+@backend.route('/<username>/lists', methods=['GET', 'POST', 'PATCH', 'DELETE'])
 def get_lists(username):
     user = User().find_by_username(username)
+    if user is None:
+        return jsonify("User does not exist"), 400
+
     lists = user[0]["lists"]
 
     if request.method == 'GET':
@@ -137,14 +142,17 @@ def get_lists(username):
         user = User().find_by_username(username)
         lists = user[0]["lists"]
         return jsonify(lists), 200
-        # return jsonify({'name': ret}), 204
+        # return jsonify({'name': ret}), 200
 
 
-@app.route('/<username>/friends',  methods=['GET', 'POST'])
+@backend.route('/<username>/friends',  methods=['GET', 'POST'])
 def get_friends(username):
     if request.method == 'GET':
         friendList = []
         user = User().find_by_username(username)
+        if user is None:
+            return jsonify("User does not exist"), 400
+
         lists = user[0]["friends"]
         for i in lists:
             fren = User().find_by_username(i)
@@ -161,7 +169,7 @@ def get_friends(username):
         return jsonify({'friend': ret}), 200
 
 
-@app.route('/', methods=['GET', 'POST'])
+@backend.route('/', methods=['GET', 'POST'])
 def helloWorld():
     if request.method == 'GET':
         return jsonify('Hello, World!'), 200
@@ -186,7 +194,7 @@ def helloWorld():
         return jsonify({"username": username}), 200
         
 
-@app.route('/api/users', methods=['POST'])
+@backend.route('/api/users', methods=['POST'])
 def create_user():
     if request.method == 'POST':
         ret = request.get_json()
@@ -199,7 +207,7 @@ def create_user():
             print("wrong teapot")
             return jsonify({}), 418
 
-        if password is None or username is None or len(User().find_by_username(username)) > 0:
+        if password is None or username is None or User().find_by_username(username) is not None:
             return jsonify({}), 418
 
         hashedPas = hashlib.sha256(password.encode())
@@ -212,7 +220,7 @@ def create_user():
         return resp
 
 
-@app.route('/admin', methods=['GET'])
+@backend.route('/admin', methods=['GET'])
 def admin_stats():
     if request.method == 'GET':
         resp = User().find_all()
@@ -244,3 +252,6 @@ def ret_task(username, listname, task_num):
             return l['tasks'][task_num]
 
     return {}
+
+if __name__ == "__main__":
+  backend.run()
