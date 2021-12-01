@@ -114,7 +114,7 @@ def get_lists(username):
             ret = User().update_list_public(username, listname, public)
             user = User().find_by_username(username)
             lists = user[0]["lists"]
-            return jsonify(ret_list(lists, listname)), 200
+            return jsonify(lists), 200
         except:
             public = None
         try:
@@ -122,7 +122,7 @@ def get_lists(username):
             ret = User().update_list_completed(username, listname, completed)
             user = User().find_by_username(username)
             lists = user[0]["lists"]
-            return jsonify(ret_list(lists, listname)), 200
+            return jsonify(lists), 200
         except:
             completed = None
 
@@ -228,14 +228,6 @@ def admin_stats():
 
         done = jsonify({"number_of_users": numusers, "number_of_lists": count}), 200
         return done
-
-
-def ret_list(lists, listname):
-    for l in lists:
-        if l['name'] == listname:
-            return l
-
-    return {}
 
 
 if __name__ == "__main__":

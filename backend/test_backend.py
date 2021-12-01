@@ -1,4 +1,3 @@
-from backend import ret_list
 import pytest
 from flask.globals import request
 
@@ -148,7 +147,7 @@ def test_update_list():
     resp = requests.patch('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=update)
     if (resp):
         r = resp.json()
-        assert ((r['public'] == True) and (resp.status_code == 200))
+        assert ((r[0]['test_list']['public'] == True) and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
@@ -175,7 +174,7 @@ def test_complete_list():
     resp = requests.patch('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=update)
     if (resp):
         r = resp.json()
-        assert ((r['completed'] == True) and (resp.status_code == 200))
+        assert ((r[0]['test_list']['completed'] == True) and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
@@ -208,22 +207,6 @@ def test_delete_list():
         assert ((r == []) and (resp.status_code == 200))
     else:
         pytest.fail("Request failed: ", resp.status_code)
-
-## HELPER TESTS ##
-
-def test_ret_list():
-    username = 'hreese'
-    listname = 'tester'
-
-    expected = {
-        "completed": False,
-        "name": "tester",
-        "public": False,
-        "tasks": []
-    }
-
-    ret = ret_list(username, listname)
-    assert(ret['name'] == expected['name'])
 
 
 ## TEARDOWN ##
