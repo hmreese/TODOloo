@@ -15,8 +15,41 @@ import ListForm from './ListForm';
 // copy = [...copy, { 
 //   id: toDoList.length + 1, task: userInput, complete: false }];
 
-function MyApp() {
+function Friends() {
+  const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordValidate, setPasswordValidate] = useState('')
+  const [friends, setFriend] = useState('')
 
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+    
+    const body = {
+      name,
+      username,
+      password,
+    };
+    // localStorage.setItem('user', JSON.stringify(body))
+    console.log(body)
+    try {
+      const res = await fetch('http://localhost:5000/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      console.log(res)
+      if (res.status === 201) {
+        const userObj = await res.json();
+        await localStorage.setItem('user', JSON.stringify(userObj))
+        setFriend(userObj)
+      } else {
+        console.log('fail')
+      }
+    } catch (e) {
+      console.log('fail')
+    }
+  };
   const FirstHash = new Map([[1,  data2]]);
   
   const ToDoForm = ({ addTask }) => {
@@ -136,7 +169,7 @@ function MyApp() {
 
   async function makePostCall(person){
     try {
-       const response = await axios.post('http://localhost:5000/users', person);
+       const response = await axios.post('https://todoloo307.herokuapp.com/users', person);
        return response.data;
     }
     catch (error) {
@@ -147,7 +180,7 @@ function MyApp() {
 
   async function fetchAll(){
     try {
-       const response = await axios.get('http://localhost:5000/users');
+       const response = await axios.get('https://todoloo307.herokuapp.com/users');
        return response.data.users_list;
     }
     catch (error){
@@ -160,7 +193,7 @@ function MyApp() {
   async function deleteid(person){
     try {
 
-      const response = await axios.delete('http://localhost:5000/users/'.concat(person._id));
+      const response = await axios.delete('https://todoloo307.herokuapp.com/users/'.concat(person._id));
       return response.data;
     }
     catch (error){
@@ -243,4 +276,4 @@ console.log("HOWMANYTIMES")
 }
 
 
-export default MyApp;
+export default Friends;
