@@ -222,7 +222,7 @@ def test_add_task():
     resp = requests.post('https://todoloo307server.herokuapp.com/testMcTesterson/lists/test_list', json=task)
     if (resp):
         r = resp.json()
-        assert ((r[-1]['tasks'][-1]['title'] == 'tester') and (resp.status_code == 201))
+        assert ((r[0]['tasks'][-1]['title'] == 'tester') and (resp.status_code == 201))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
