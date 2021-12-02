@@ -93,9 +93,6 @@ def get_lists(username):
             public = request.get_json()['public']
         except:
             public = False
-            
-        if public is not False:
-            public = True
 
         for l in lists:
             if l["name"] == listname:
@@ -136,7 +133,7 @@ def get_lists(username):
             listname = request.get_json()['listname']
         except:
             return jsonify({}), 400
-        if username is None or listname is None:
+        if username is None or len(listname) == 0:
             return jsonify({}), 400
 
         ret = User().remove_list(username, listname)
