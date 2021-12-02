@@ -93,6 +93,9 @@ def get_lists(username):
             public = request.get_json()['public']
         except:
             public = False
+            
+        if public is not False:
+            public = True
 
         for l in lists:
             if l["name"] == listname:

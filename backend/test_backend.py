@@ -188,14 +188,15 @@ def test_add_list():
 
 def test_add_list_public():
     new_list = {
-        "listname": "temp",
-        "public": False
+        "listname": "test_list",
+        "public": "wow"
     }
 
     resp = requests.post('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=new_list)
+    print(resp)
     if (resp):
         r = resp.json()
-        assert ((r[-1]['name'] == 'temp'))
+        assert ((r[-1]['name'] == 'test_list'))
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
