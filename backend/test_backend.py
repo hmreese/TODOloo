@@ -226,6 +226,19 @@ def test_add_task():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
+def test_add_task_fail():
+    task = {
+        "title": "tester",
+        "date": "11-11-2021",
+        "description": "N/A"
+    }
+
+    resp = requests.post('https://todoloo307server.herokuapp.com/testMcTesterson/lists/test_list', json=task)
+    if (resp.status_code):
+        assert (resp.status_code == 400)
+    else:
+        pytest.fail("Request failed: ", resp.status_code)
+
 
 def test_add_friend():
     friend = {
@@ -239,7 +252,16 @@ def test_add_friend():
     else:
         pytest.fail("Request failed: ", resp.status_code)
 
+def test_add_friend_fail():
+    friend = {
+        "not_a_teapot": "hreese"
+    }
 
+    resp = requests.post('https://todoloo307server.herokuapp.com/testMcTesterson/friends', json=friend)
+    if (resp.status_code):
+        assert (resp.status_code == 400)
+    else:
+        pytest.fail("Request failed: ", resp.status_code)
 ## PATCH TESTS ##
 
 def test_update_list():
