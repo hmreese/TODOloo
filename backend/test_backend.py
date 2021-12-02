@@ -106,19 +106,19 @@ def test_get_admin_stats():
 
 ## POST TESTS ##
 
-def test_create_user():
-    user = {
-        "username": "testMcTesterson",
-        "password": "test123",
-        "name": "Test"
-    }
+# def test_create_user():
+#     user = {
+#         "username": "testMcTesterson",
+#         "password": "test123",
+#         "name": "Test"
+#     }
 
-    resp = requests.post('https://todoloo307server.herokuapp.com/api/users', json=user)
-    if (resp):
-        r = resp.json()
-        assert (r['username'] == 'testMcTesterson')
-    else:
-        pytest.fail("Request failed: ", resp.status_code)
+#     resp = requests.post('https://todoloo307server.herokuapp.com/api/users', json=user)
+#     if (resp):
+#         r = resp.json()
+#         assert (r['username'] == 'testMcTesterson')
+#     else:
+#         pytest.fail("Request failed: ", resp.status_code)
 
 
 def test_create_user_fail1():
