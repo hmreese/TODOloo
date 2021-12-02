@@ -8,13 +8,18 @@ https://www.figma.com/file/74NjrMQzElmnqmF5CAaNzJ/TODOloo-app?node-id=6%3A2
 Last Updated: 10/20/21
 
 # Development Environment Setup
-FIX ME
-## Getting Started with Create React App
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-1. !!!!
+Clone the repo
 
-## Python Flask
-1. !!!!
+## Frontend - React
+1. npm install
+2. npm start
+
+## Backend - Flask
+1. cd backend
+2. Start your virtual environment
+3. set FLASK_APP=backend.py
+4. set FLASK_ENV=development
+5. flask run
 
 ## MongoDB Atlas
 1. Obtain database access credentials from @hmreese
