@@ -5,6 +5,7 @@ from flask import Flask
 import requests
 from flask import jsonify
 import json
+import backend
 
 from mongodb import User, Model
 
@@ -283,18 +284,6 @@ def test_update_list():
 
 
 def test_update_list_fail1():
-    update = {
-        "listname": "test_list"
-    }
-
-    resp = requests.patch('https://todoloo307server.herokuapp.com/testMcTesterson/lists', json=update)
-    if (resp.status_code):
-        assert (resp.status_code == 400)
-    else:
-        pytest.fail("Request failed: ", resp.status_code)
-
-
-def test_update_list_fail2():
     update = {
         "temp": "test_list"
     }

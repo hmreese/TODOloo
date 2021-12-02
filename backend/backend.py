@@ -126,7 +126,6 @@ def get_lists(username):
         except:
             completed = None
 
-        return jsonify({"No update information provided: public, completed"}), 400
 
     elif request.method == 'DELETE':
         try:
