@@ -31,16 +31,16 @@ NOTE: make sure that ".env" is listed in your gitignore file to ensure passwords
 # Continuous Integration
 https://github.com/hmreese/TODOloo/actions
 
-# Wiki
+## Wiki
 https://github.com/hmreese/TODOloo/wiki
 
-# Pretty code addons/linters
+## Pretty code addons/linters
 
 instructions on how to set up IDE plugins can be found on site
 
 python - https://pypi.org/project/pycodestyle/
 JavaScript/React - https://create-react-app.dev/docs/setting-up-your-editor
  
-#Testing Coverage
+## Testing Coverage
   
    ![image](https://user-images.githubusercontent.com/56707357/144517732-5c7a4489-f7e9-431e-9767-977da8b4fc41.png)
